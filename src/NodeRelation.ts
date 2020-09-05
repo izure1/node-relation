@@ -1,6 +1,8 @@
+import AdvancedArray from './AdvancedArray'
+
 type RelationNode = string|number|Symbol
-type Relation = RelationNode[]
-type RelationGroup = Relation[]
+class Relation extends AdvancedArray<RelationNode> {}
+class RelationGroup extends AdvancedArray<Relation> {}
 
 /**
  * 
@@ -8,7 +10,7 @@ type RelationGroup = Relation[]
  * @description     새로운 RelationGroup 인스턴스를 만들어 반환합니다.
  */
 function create(...relations: Relation[]): RelationGroup {
-    const group: RelationGroup = []
+    const group: RelationGroup = new RelationGroup
     for (const relation of relations) group.push(relation)
     return group
 }
@@ -20,34 +22,26 @@ function create(...relations: Relation[]): RelationGroup {
  * @description     서로 관련 있는 노드를 매개변수로 넘겨 릴레이션으로 지정합니다.
  */
 function setRelation(group: RelationGroup, ...keys: RelationNode[]): RelationGroup {
-    const allKeys: Set<RelationNode> = new Set([...keys])
-    const totalKeys: Set<RelationNode> = new Set
-    const lists: Set<Relation> = new Set
 
-    // 새로 받은 key를 보유하고 있는 모든 릴레이션을 받아와 lists 변수에 담습니다.
+    const allKeys: AdvancedArray<RelationNode> = new AdvancedArray
+    allKeys.push(...keys)
+    allKeys.deduplication()
+
+    const relations: AdvancedArray<Relation> = new AdvancedArray
+    const newReleation: Relation = new Relation(...allKeys)
+
     for (const key of allKeys) {
-        for (const relation of group) {
-            const hasKey: boolean = relation.indexOf(key) !== -1
-            if (hasKey) lists.add(relation)
-        }
-    }
-    // lists 변수에 담긴 릴레이션을 group 인스턴스에서 삭제합니다.
-    // 이후 삭제된 릴레이션의 내용물을 prevRelation 변수에 담습니다.
-    for (const relation of lists) {
-        let i: number = group.length
-        while (i--) {
-            if (group[i] !== relation) continue
-            group.splice(i, 1)
-            for (const key of relation) totalKeys.add(key)
-        }
+        relations.ensure(getRelation(group, key))
     }
 
-    // 새로운 릴레이션을 만듭니다.
-    // 이 배열에는 이전에 prevRelation에 있던 모든 내용을 중복없이 하나로 합쳤습니다.
-    const newKeys: Set<RelationNode> = [...allKeys].reduce((totalKeys: Set<RelationNode>, key: RelationNode) => totalKeys.add(key), totalKeys)
-    const newRelation: Relation = [...newKeys]
+    for (const relation of relations) {
+        for (const relationNode of relation) {
+            newReleation.ensure(relationNode)
+        }
+        group.delete(relation)
+    }
 
-    group.push(newRelation)
+    group.push(newReleation)
     return group
 }
 
@@ -57,7 +51,7 @@ function setRelation(group: RelationGroup, ...keys: RelationNode[]): RelationGro
  * @description     RelationGroup 인스턴스에 담긴 모든 노드를 배열로 반환합니다.
  */
 function getNodes(group: RelationGroup): RelationNode[] {
-    const lists: Relation = []
+    const lists: Relation = new Relation
     for (const relation of group) lists.push(...relation)
     return [...new Set(lists)]
 }
@@ -70,10 +64,9 @@ function getNodes(group: RelationGroup): RelationNode[] {
  */
 function getRelation(group: RelationGroup, u: RelationNode): Relation {
     for (const relation of group) {
-        const hasKey: boolean = relation.indexOf(u) !== -1
-        if (hasKey) return relation
+        if (relation.has(u)) return relation
     }
-    return [] as Relation
+    return new Relation
 }
 
 /**
@@ -142,7 +135,7 @@ function getRelationEvery(groups: RelationGroup, ...keys: RelationNode[]): Relat
             break
         }
     }
-    return [...result]
+    return new Relation(...result)
 }
 
 /**
@@ -157,7 +150,7 @@ function getRelationSome(groups: RelationGroup, ...keys: RelationNode[]): Relati
         const keys: Relation = getRelation(groups, u)
         for (const key of keys) result.add(key)
     }
-    return [...result]
+    return new Relation(...result)
 }
 
 

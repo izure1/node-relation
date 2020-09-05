@@ -1,6 +1,6 @@
 {
   "name": "node-relation",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Manage strings that are related to each other.",
   "main": "dist/NodeRelation.js",
   "scripts": {
