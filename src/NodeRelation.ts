@@ -52,8 +52,10 @@ function setRelation(group: RelationGroup, ...keys: RelationNode[]): RelationGro
  */
 function getNodes(group: RelationGroup): RelationNode[] {
     const lists: Relation = new Relation
-    for (const relation of group) lists.push(...relation)
-    return [...new Set(lists)]
+    const relationNodes: AdvancedArray<RelationNode> = new AdvancedArray
+    for (const relation of group) relationNodes.push(...relation)
+    relationNodes.deduplication()
+    return [ ...relationNodes ]
 }
 
 /**
@@ -87,10 +89,9 @@ function hasNode(group: RelationGroup, u: RelationNode): boolean {
  */
 function deleteNode(groups: RelationGroup, u: RelationNode): Relation | null {
     const t: Relation = getRelation(groups, u)
-    if (!t) return null
+    if (!t.length) return null
     else {
-        const i: number = t.indexOf(u)
-        t.splice(i, 1)
+        t.delete(u)
         return t
     }
 }
@@ -104,8 +105,10 @@ function deleteNode(groups: RelationGroup, u: RelationNode): Relation | null {
 function dropRelation(groups: RelationGroup, u: RelationNode): void {
     let i: number = groups.length
     while (i--) {
-        const hasKey = groups[i].indexOf(u) !== -1
-        if (hasKey) groups.splice(i, 1)
+        const relation: Relation = groups[i]
+        if (relation.has(u)) {
+            groups.delete(relation)
+        }
     }
 }
 
@@ -115,7 +118,7 @@ function dropRelation(groups: RelationGroup, u: RelationNode): void {
  * @description     RelationGroup 인스턴스의 릴레이션을 모두 제거하여 초기화합니다.
  */
 function clear(groups: RelationGroup): void {
-    groups.splice(0, groups.length)
+    groups.clear()
 }
 
 /**
