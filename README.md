@@ -1,6 +1,6 @@
 # node-relation
 
-This module helps you manage string, numbers, and cymbols as a group.
+This module helps you manage string, numbers, and symbols as a group.
 
 ```
 import { create, setRelation, getRelation } from 'node-relation'
