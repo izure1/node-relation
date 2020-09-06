@@ -31,11 +31,11 @@ function create(...relations: Relation[]): RelationGroup {
 
 /**
  * 대상 노드를 포함하고 있지 않는 모든 릴레이션을 묶어 새로운 RelationGroup 인스턴스를 반환합니다.
- * @param groups    RelationGroup 인스턴스입니다.
+ * @param group     RelationGroup 인스턴스입니다.
  * @param nodes     포함되지 않을 노드입니다.
  */
-function exclude(groups: RelationGroup, ...nodes: RelationNode[]): RelationGroup {
-    const excludeRelations: Relation[] = groups.relations.filter((relation: Relation): boolean => {
+function exclude(group: RelationGroup, ...nodes: RelationNode[]): RelationGroup {
+    const excludeRelations: Relation[] = group.relations.filter((relation: Relation): boolean => {
         for (const node of nodes) {
             if (relation.has(node)) return false
         }
@@ -88,11 +88,11 @@ function getRelation(group: RelationGroup, node: RelationNode): Relation | null 
 
 /**
  * 대상 노드를 모두 포함하고 있는 릴레이션을 반환합니다. 해당되는 릴레이션이 없다면 null을 반환합니다.
- * @param groups    RelationGroup 인스턴스입니다.
+ * @param group     RelationGroup 인스턴스입니다.
  * @param nodes     대상 노드입니다.
  */
-function getRelationEvery(groups: RelationGroup, ...nodes: RelationNode[]): Relation | null {
-    const matchedRelations: Relation[] = groups.filter((relation: Relation): boolean => {
+function getRelationEvery(group: RelationGroup, ...nodes: RelationNode[]): Relation | null {
+    const matchedRelations: Relation[] = group.filter((relation: Relation): boolean => {
         for (const node of nodes) {
             if ( !relation.has(node) ) return false
         }
@@ -124,11 +124,11 @@ function hasNode(group: RelationGroup, node: RelationNode): boolean {
 
 /**
  * 릴레이션이 대상 노드를 포함하고 있다면 노드를 삭제하고, 해당 릴레이션을 반환합니다. 어떤 릴레이션도 대상 노드를 가지고 있지 않다면 null을 반환합니다.
- * @param groups    RelationGroup 인스턴스입니다.
+ * @param group     RelationGroup 인스턴스입니다.
  * @param node      대상 노드입니다.
  */
-function deleteNode(groups: RelationGroup, node: RelationNode): Relation | null {
-    const t: Relation | null = getRelation(groups, node)
+function deleteNode(group: RelationGroup, node: RelationNode): Relation | null {
+    const t: Relation | null = getRelation(group, node)
     if (!t) return null
     else {
         t.delete(node)
@@ -138,25 +138,25 @@ function deleteNode(groups: RelationGroup, node: RelationNode): Relation | null 
 
 /**
  * 대상 노드를 포함하고 있는 릴레이션을 RelationGroup 인스턴스에서 삭제합니다.
- * @param groups    RelationGroup 인스턴스입니다.
+ * @param group     RelationGroup 인스턴스입니다.
  * @param node      대상 노드입니다.
  */
-function dropRelation(groups: RelationGroup, node: RelationNode): void {
-    let i: number = groups.length
+function dropRelation(group: RelationGroup, node: RelationNode): void {
+    let i: number = group.relations.length
     while (i--) {
-        const relation: Relation = groups[i]
+        const relation: Relation = group[i]
         if (relation.has(node)) {
-            groups.delete(relation)
+            group.delete(relation)
         }
     }
 }
 
 /**
  * RelationGroup 인스턴스의 릴레이션을 모두 제거하여 초기화합니다.
- * @param groups    RelationGroup 인스턴스입니다.
+ * @param group     RelationGroup 인스턴스입니다.
  */
-function clear(groups: RelationGroup): void {
-    groups.clear()
+function clear(group: RelationGroup): void {
+    group.clear()
 }
 
 
