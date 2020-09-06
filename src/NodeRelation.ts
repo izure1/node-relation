@@ -30,6 +30,21 @@ function create(...relations: Relation[]): RelationGroup {
 }
 
 /**
+ * 대상 노드를 포함하고 있지 않는 모든 릴레이션을 묶어 새로운 RelationGroup 인스턴스를 반환합니다.
+ * @param groups    RelationGroup 인스턴스입니다.
+ * @param nodes     포함되지 않을 노드입니다.
+ */
+function exclude(groups: RelationGroup, ...nodes: RelationNode[]): RelationGroup {
+    const excludeRelations: Relation[] = groups.relations.filter((relation: Relation): boolean => {
+        for (const node of nodes) {
+            if (relation.has(node)) return false
+        }
+        return true
+    })
+    return create(...excludeRelations)
+}
+
+/**
  * 서로 관련 있는 노드를 매개변수로 넘겨 릴레이션으로 지정합니다.
  * @param group     RelationGroup 인스턴스입니다.
  * @param nodes     서로 관련성을 가지는 노드입니다.
@@ -65,20 +80,35 @@ function setRelation(group: RelationGroup, ...node: RelationNode[]): RelationGro
  * @param node      대상 노드입니다.
  */
 function getRelation(group: RelationGroup, node: RelationNode): Relation | null {
-    for (const relation of group) {
+    for (const relation of group.relations) {
         if (relation.has(node)) return relation
     }
     return null
 }
 
 /**
- * group.nodes getter를 사용하십시오.
+ * 대상 노드를 모두 포함하고 있는 릴레이션을 반환합니다. 해당되는 릴레이션이 없다면 null을 반환합니다.
+ * @param groups    RelationGroup 인스턴스입니다.
+ * @param nodes     대상 노드입니다.
+ */
+function getRelationEvery(groups: RelationGroup, ...nodes: RelationNode[]): Relation | null {
+    const matchedRelations: Relation[] = groups.filter((relation: Relation): boolean => {
+        for (const node of nodes) {
+            if ( !relation.has(node) ) return false
+        }
+        return true
+    })
+    return matchedRelations.pop() || null
+}
+
+/**
+ * RelationGroup 인스턴스에 담긴 모든 노드를 배열로 반환합니다.
  * @param group     RelationGroup 인스턴스입니다.
- * @description     RelationGroup 인스턴스에 담긴 모든 노드를 배열로 반환합니다.
+ * @deprecated      group.nodes getter를 사용하십시오.
  */
 function getNodes(group: RelationGroup): RelationNode[] {
     const relationNodes: AdvancedArray<RelationNode> = new AdvancedArray
-    for (const relation of group) relationNodes.push(...relation)
+    for (const relation of group.relations) relationNodes.push(...relation)
     relationNodes.deduplication()
     return [ ...relationNodes ]
 }
@@ -129,24 +159,10 @@ function clear(groups: RelationGroup): void {
     groups.clear()
 }
 
-/**
- * 대상 노드를 모두 포함하고 있는 릴레이션을 반환합니다. 해당되는 릴레이션이 없다면 null을 반환합니다.
- * @param groups    RelationGroup 인스턴스입니다.
- * @param nodes     대상 노드입니다.
- */
-function getRelationEvery(groups: RelationGroup, ...nodes: RelationNode[]): Relation | null {
-    const matchedRelations: Relation[] = groups.filter((relation: Relation): boolean => {
-        for (const node of nodes) {
-            if ( !relation.has(node) ) return false
-        }
-        return true
-    })
-    return matchedRelations.pop() || null
-}
-
 
 export {
     create,
+    exclude,
     clear,
     hasNode,
     getNodes,
