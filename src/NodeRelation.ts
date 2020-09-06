@@ -12,7 +12,7 @@ class RelationGroup extends AdvancedArray<Relation> {
     }
     get nodes(): RelationNode[] {
         let nodes: RelationNode[] = []
-        for (const relation of this.relations) {
+        for (const relation of this) {
             nodes.push(...relation.nodes)
         }
         return nodes
@@ -35,7 +35,7 @@ function create(...relations: Relation[]): RelationGroup {
  * @param nodes     포함되지 않을 노드입니다.
  */
 function exclude(group: RelationGroup, ...nodes: RelationNode[]): RelationGroup {
-    const excludeRelations: Relation[] = group.relations.filter((relation: Relation): boolean => {
+    const excludeRelations: Relation[] = group.filter((relation: Relation): boolean => {
         for (const node of nodes) {
             if (relation.has(node)) return false
         }
@@ -80,7 +80,7 @@ function setRelation(group: RelationGroup, ...node: RelationNode[]): RelationGro
  * @param node      대상 노드입니다.
  */
 function getRelation(group: RelationGroup, node: RelationNode): Relation | null {
-    for (const relation of group.relations) {
+    for (const relation of group) {
         if (relation.has(node)) return relation
     }
     return null
@@ -108,7 +108,7 @@ function getRelationEvery(group: RelationGroup, ...nodes: RelationNode[]): Relat
  */
 function getNodes(group: RelationGroup): RelationNode[] {
     const relationNodes: AdvancedArray<RelationNode> = new AdvancedArray
-    for (const relation of group.relations) relationNodes.push(...relation)
+    for (const relation of group) relationNodes.push(...relation)
     relationNodes.deduplication()
     return [ ...relationNodes ]
 }
@@ -142,7 +142,7 @@ function deleteNode(group: RelationGroup, node: RelationNode): Relation | null {
  * @param node      대상 노드입니다.
  */
 function dropRelation(group: RelationGroup, node: RelationNode): void {
-    let i: number = group.relations.length
+    let i: number = group.length
     while (i--) {
         const relation: Relation = group[i]
         if (relation.has(node)) {
