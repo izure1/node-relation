@@ -45,11 +45,36 @@ function exclude(group: RelationGroup, ...nodes: RelationNode[]): RelationGroup 
 }
 
 /**
+ * RelationGroup 인스턴스의 릴레이션을 모두 제거하여 초기화합니다.
+ * @param group     RelationGroup 인스턴스입니다.
+ */
+function clear(group: RelationGroup): RelationGroup {
+    group.clear()
+    return group
+}
+
+/**
+ * 대상 노드를 포함하고 있는 릴레이션에서 대상 노드를 제거한 새로운 릴레이션을 반환합니다.
+ * @param group     RelationGroup 인스턴스입니다.
+ * @param node      대상 노드입니다.
+ */
+function createRelationRelatives(group: RelationGroup, node: RelationNode): Relation {
+    const relation: Relation = new Relation
+    const matchedRelation: Relation | null = getRelation(group, node)
+    if (matchedRelation) {
+        const nodes: AdvancedArray<RelationNode> = new AdvancedArray(...matchedRelation.nodes)
+        nodes.delete(node)
+        relation.push(...nodes)
+    }
+    return relation
+}
+
+/**
  * 서로 관련 있는 노드를 매개변수로 넘겨 릴레이션으로 지정합니다.
  * @param group     RelationGroup 인스턴스입니다.
  * @param nodes     서로 관련성을 가지는 노드입니다.
  */
-function setRelation(group: RelationGroup, ...node: RelationNode[]): RelationGroup {
+function setRelation(group: RelationGroup, ...node: RelationNode[]): Relation {
 
     const allKeys: AdvancedArray<RelationNode> = new AdvancedArray
     allKeys.push(...node)
@@ -71,7 +96,7 @@ function setRelation(group: RelationGroup, ...node: RelationNode[]): RelationGro
     }
 
     group.push(newRelation)
-    return group
+    return newRelation
 }
 
 /**
@@ -149,14 +174,6 @@ function dropRelation(group: RelationGroup, node: RelationNode): void {
             group.delete(relation)
         }
     }
-}
-
-/**
- * RelationGroup 인스턴스의 릴레이션을 모두 제거하여 초기화합니다.
- * @param group     RelationGroup 인스턴스입니다.
- */
-function clear(group: RelationGroup): void {
-    group.clear()
 }
 
 
