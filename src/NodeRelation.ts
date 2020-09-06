@@ -184,6 +184,7 @@ export {
     hasNode,
     getNodes,
     deleteNode,
+    createRelationRelatives,
     setRelation,
     getRelation,
     getRelationEvery,
