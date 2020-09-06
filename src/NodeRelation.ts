@@ -1,8 +1,23 @@
 import AdvancedArray from './AdvancedArray'
 
 type RelationNode = string|number|Symbol
-class Relation extends AdvancedArray<RelationNode> {}
-class RelationGroup extends AdvancedArray<Relation> {}
+class Relation extends AdvancedArray<RelationNode> {
+    get nodes(): RelationNode[] {
+        return [ ...this ]
+    }
+}
+class RelationGroup extends AdvancedArray<Relation> {
+    get relations(): Relation[] {
+        return [ ...this ]
+    }
+    get nodes(): RelationNode[] {
+        let nodes: RelationNode[] = []
+        for (const relation of this.relations) {
+            nodes.push(...relation.nodes)
+        }
+        return nodes
+    }
+}
 
 /**
  * 
@@ -49,18 +64,6 @@ function setRelation(group: RelationGroup, ...node: RelationNode[]): RelationGro
 /**
  * 
  * @param group     RelationGroup 인스턴스입니다.
- * @description     RelationGroup 인스턴스에 담긴 모든 노드를 배열로 반환합니다.
- */
-function getNodes(group: RelationGroup): RelationNode[] {
-    const relationNodes: AdvancedArray<RelationNode> = new AdvancedArray
-    for (const relation of group) relationNodes.push(...relation)
-    relationNodes.deduplication()
-    return [ ...relationNodes ]
-}
-
-/**
- * 
- * @param group     RelationGroup 인스턴스입니다.
  * @param node      대상 노드입니다.
  * @description     대상 노드를 포함하고 있는 릴레이션을 반환합니다. 어떤 릴레이션도 대상 노드를 가지고 있지 않다면 null을 반환합니다.
  */
@@ -69,6 +72,19 @@ function getRelation(group: RelationGroup, node: RelationNode): Relation | null 
         if (relation.has(node)) return relation
     }
     return null
+}
+
+/**
+ * 
+ * @param group     RelationGroup 인스턴스입니다.
+ * @description     RelationGroup 인스턴스에 담긴 모든 노드를 배열로 반환합니다.
+ * @deprecated      group.nodes getter를 사용하십시오.
+ */
+function getNodes(group: RelationGroup): RelationNode[] {
+    const relationNodes: AdvancedArray<RelationNode> = new AdvancedArray
+    for (const relation of group) relationNodes.push(...relation)
+    relationNodes.deduplication()
+    return [ ...relationNodes ]
 }
 
 /**
