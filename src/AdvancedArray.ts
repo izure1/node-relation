@@ -1,4 +1,4 @@
-export default class AdvancedArray<T> extends Array {
+export default class AdvancedArray<T> extends Array<T> {
 
     constructor(...params: T[]) {
         super()
@@ -30,13 +30,6 @@ export default class AdvancedArray<T> extends Array {
         const set: Set<T> = new Set(this)
         this.clear()
         this.push(...set)
-    }
-
-    *[Symbol.iterator](): IterableIterator<T> {
-        for (let i: number = 0, len: number = this.length; i < len; i++) {
-            const t: T = this[i]
-            yield t
-        }
     }
     
 }
