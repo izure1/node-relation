@@ -2,7 +2,8 @@
 
 This module helps you manage string, numbers as a group.
 
-The data in the instance is immutable. Do not modify the data in the instance that invokes the method (setRelation, getRelation, getLegionRelation, deleteNode, etc.). Instead, it returns the result with a new instance.
+The data inside the instance is immutable.
+The method does not modify the data inside, it returns the result of the calculation as a new instance.
 
 Check the code.
 ```
