@@ -32,13 +32,13 @@ const B = A.setRelation('English', 'US', 'France', 'Italy')
 ### getRelation(...nodes: `RelationNode[]`): `Relation`
 Only the nodes that are related to the node received by the parameter are filtered and returned in a new relation instance.
 ```
-A.getRelation('language').nodes // English, Korean, Japanese
-B.getRelation('English').nodes // US, France, Italy
+A.getRelation('language').nodes // language, English, Korean, Japanese
+B.getRelation('English').nodes // language, English, US, France, Italy
 ```
 ### getLegionRelation(...nodes: `RelationNode[]`): `Relation`
 Only groups of nodes that are associated with the node received by the parameter. Then make and return a new relation instance.
 ```
-B.getLegionRelation('language').nodes // English, Korean, Japanese, US, France, Italy
+B.getLegionRelation('language').nodes // language, English, Korean, Japanese, US, France, Italy
 ```
 ### deleteRelation(target: `RelationNode`, ...nodes: `RelationNode[]`): Relation
 Deletes the relationship between nodes and returns it as a new relation instance.
@@ -48,7 +48,7 @@ B.deleteRelation('English', 'France')
 ### deleteNode(...nodes: `RelationNode[]`): `Relation`
 Delete the node. If the node associated with the deleted node is isolated, it is deleted together. Returns the result with a new relation instance.
 ```
-B.deleteNode('lanugage').nodes // English, US, France, Italy
+B.deleteNode('language').nodes // English, US, France, Italy
 ```
 ## Try it simply
 ```
