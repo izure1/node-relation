@@ -18,6 +18,12 @@ const relationD = relationC.setRelation('e', 'a')
 console.log(relationD.getLegionRelation('e').nodes)
 ```
 ---
+## Install
+You can download in npm [node-relation](https://www.npmjs.com/package/node-relation).
+```
+npm install node-relation
+```
+---
 ## Methods
 The data inside the instance is immutable.
 The method does not modify the data inside, it returns the result of the calculation as a new instance.
