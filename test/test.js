@@ -1,4 +1,4 @@
-var Relation = require('../dist/NodeRelation')
+var Relation = require('../dist/NodeRelation.js')
 
 const relationA = new Relation().setRelation('a', 'b', 'c')
 console.log(relationA.nodes)
@@ -11,3 +11,4 @@ console.log(relationC.getLegionRelation('e').nodes)
 
 const relationD = relationC.setRelation('e', 'a')
 console.log(relationD.getLegionRelation('e').nodes)
+console.log(relationD.getLegionRelation('e').nodes, relationD.getLegionRelation('e').getNodes('e'))

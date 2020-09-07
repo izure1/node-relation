@@ -106,6 +106,7 @@ export default class Relation {
      * 대상 노드와 관계를 형성하고 있는 모든 노드 목록을 배열로 반환합니다. 여러 노드를 매개변수로 전달하면, 합집합이 됩니다.
      * 배열에 대상 노드는 포함되지 않으니 주의하십시오.
      * @param nodes     대상 노드입니다.
+     * @deprecated      삭제될 예정입니다. getRelation(...nodes).getNodes() 패턴을 이용하십시오.
      */
     getRelativeNodes(...nodes: RelationNode[]): RelationNode[] {
         const relatives: AdvancedArray<RelationNode> = new AdvancedArray
@@ -113,6 +114,18 @@ export default class Relation {
             for (const t of this.getRelation(node).nodes) {
                 relatives.ensure(t)
             }
+            relatives.delete(node)
+        }
+        return [ ...relatives ]
+    }
+
+    /**
+     * 릴레이션에 존재하는 노드 목록을 배열로 반환합니다. 일반적으로 relation.nodes와 비슷하지만, 매개변수로 전달한 노드는 제거 됩니다.
+     * @param nodes     배열에 포함되지 않을 노드입니다.
+     */
+    getNodes(...hiddenNodes: RelationNode[]): RelationNode[] {
+        const relatives: AdvancedArray<RelationNode> = new AdvancedArray(...this.nodes)
+        for (const node of hiddenNodes) {
             relatives.delete(node)
         }
         return [ ...relatives ]
