@@ -40,6 +40,11 @@ Only groups of nodes that are associated with the node received by the parameter
 ```
 B.getLegionRelation('language').nodes // language, English, Korean, Japanese, US, France, Italy
 ```
+### getRelativeNodes(...nodes: `RelationNode[]`): `Relation`
+Same as `relation.nodes`, but removes the node passed as a parameter.
+```
+B.getLegionRelation('language').getRelativeNodes('language') // English, Korean, Japanese, US, France, Italy
+```
 ### deleteRelation(target: `RelationNode`, ...nodes: `RelationNode[]`): Relation
 Deletes the relationship between nodes and returns it as a new relation instance.
 ```
