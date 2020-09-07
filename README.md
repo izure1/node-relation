@@ -64,6 +64,6 @@ const relation = new Relation()
 console.log(`Languages: ${ relation.getRelativeNodes('language') }`)
 // Languages: English, Korean, Japanese
 
-console.log(`English country: ${ relation.getRelation('English').deleteNode('language').getRelativeNodes('English') }`)
+console.log(`English country: ${ relation.getRelation('English').deleteNode('language').getNodes('English') }`)
 // English country: US, France, Italy 
 ```
