@@ -9,7 +9,8 @@ module.exports = {
         path: path.join(__dirname, 'dist'),
         filename: '[name].js',
         libraryTarget: 'umd',
-        library: 'NodeRelation'
+        library: 'NodeRelation',
+        globalObject: 'this'
     },
     module: {
         rules: [
