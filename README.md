@@ -1,10 +1,6 @@
 # node-relation
 
 This module helps you manage string, numbers as a group.
-
-The data inside the instance is immutable.
-The method does not modify the data inside, it returns the result of the calculation as a new instance.
-
 Check the code.
 ```
 import Relation from 'node-relation'
@@ -23,6 +19,21 @@ console.log(relationD.getLegionRelation('e').nodes)
 ```
 ---
 ## Methods
+The data inside the instance is immutable.
+The method does not modify the data inside, it returns the result of the calculation as a new instance.
+
+### `(getter)` nodes: `RelationNode[]`
+Get all nodes from the instance.
+```
+const relation = new Relation().setRelation('a', 'b').setRelation('b', 'c')
+relation.nodes // a, b, c
+```
+### `(getter)` tuples: `RelationNodeTuple[]`
+Returns an array of relationships between nodes in the instance. Relationships are converted to tuples.
+```
+const relation = new Relation().setRelation('a', 'b').setRelation('b', 'c')
+relation.tuples // [ [a,b], [b,c] ]
+```
 ### setRelation(target: `RelationNode`, ...nodes: `RelationNode[]`): `Relation`
 Creates a new relationship between nodes, and returns it as a relation instance.
 ```
@@ -40,12 +51,12 @@ Only groups of nodes that are associated with the node received by the parameter
 ```
 B.getLegionRelation('language').nodes // language, English, Korean, Japanese, US, France, Italy
 ```
-### getNodes(...nodes: `RelationNode[]`): `Relation`
+### getNodes(...nodes: `RelationNode[]`): `RelationNode[]`
 Same as `relation.nodes`, but removes the node passed as a parameter.
 ```
 B.getLegionRelation('language').getRelativeNodes('language') // English, Korean, Japanese, US, France, Italy
 ```
-### deleteRelation(target: `RelationNode`, ...nodes: `RelationNode[]`): Relation
+### deleteRelation(target: `RelationNode`, ...nodes: `RelationNode[]`): `Relation`
 Deletes the relationship between nodes and returns it as a new relation instance.
 ```
 B.deleteRelation('English', 'France')
