@@ -1,13 +1,14 @@
 {
   "name": "node-relation",
   "version": "3.0.0",
-  "description": "Manage strings that are related to each other.",
+  "description": "Manage strings, number, object that are related to each other.",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack"
   },
   "author": "izure <admin@izure.org>",
+  "keywords": ["relationship", "manage", "group", "node"],
   "license": "MIT",
   "devDependencies": {
     "webpack": "4.44.1",
