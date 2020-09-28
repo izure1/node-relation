@@ -3,19 +3,19 @@
 This module helps you manage string, numbers as a group.
 Check the code.
 ```
-import Relation from 'node-relation'
+import { Relationship } from 'node-relation'
 
-const relationA = new Relation().setRelation('a', 'b', 'c')
-console.log(relationA.nodes)
+const A = new Relationship().setReferTo('a', 'b', 'c')
+console.log(A.nodes) // ['a', 'b', 'c']
 
-const relationB = relationA.setRelation('b', 'd')
-console.log(relationB.nodes)
+const B = A.setReferTo('b', 'd')
+console.log(B.nodes) // ['a', 'b', 'c', 'd']
 
-const relationC = relationB.setRelation('e', 'f')
-console.log(relationC.getLegionRelation('e').nodes)
+const C = B.setReferTo('e', 'f')
+console.log(C.getRelation('e').nodes) // ['e', 'f']
 
-const relationD = relationC.setRelation('e', 'a')
-console.log(relationD.getLegionRelation('e').nodes)
+const D = C.setReferTo('e', 'a')
+console.log(D.getRelation('e').nodes) // ['a', 'b', 'c', 'd', 'e', 'f']
 ```
 ---
 ## Install
@@ -28,59 +28,76 @@ npm install node-relation
 The data inside the instance is immutable.
 The method does not modify the data inside, it returns the result of the calculation as a new instance.
 
+### constructor(dataset?: `RelationData[]`): `Relationship`
+You can pass dataset paramter to init this instance.
+The `RelationData` is type of 2-dimentional array. Check dataset getter description.
+```
+const rs = new Relationship([['language', ['English', 'Korean', 'Japanese']]])
+const copy = new Relationship(rs.dataset)
+```
+### `(getter)` dataset: `RelationData[]`
+Returns as 2-dimentional array of relationships between nodes in the instance. Relationships are returned to saveable data-type(json).
+```
+const rs = new Relationship().setReferTo('a', 'b').setReferTo('b', 'c', 'd')
+rs.dataset // [ [a,['b']], [b,['c', 'd']] ]
+```
 ### `(getter)` nodes: `RelationNode[]`
 Get all nodes from the instance.
 ```
-const relation = new Relation().setRelation('a', 'b').setRelation('b', 'c')
-relation.nodes // a, b, c
+const rs = new Relation().setReferTo('a', 'b').setReferTo('b', 'c')
+rs.nodes // a, b, c
 ```
-### `(getter)` tuples: `RelationNodeTuple[]`
-Returns an array of relationships between nodes in the instance. Relationships are converted to tuples.
+### setReferTo(target: `RelationNode`, ...nodes: `RelationNode[]`): `Relationship`
+Creates a new refer between nodes, and returns it as a Relationship instance.
+This is one-sided relationship between both nodes.
 ```
-const relation = new Relation().setRelation('a', 'b').setRelation('b', 'c')
-relation.tuples // [ [a,b], [b,c] ]
+const A = new Relationship().setReferTo('language', 'English', 'Korean', 'Japanese')
 ```
-### setRelation(target: `RelationNode`, ...nodes: `RelationNode[]`): `Relation`
-Creates a new relationship between nodes, and returns it as a relation instance.
+### setReferBoth(target: `RelationNode`, ...nodes: `RelationNode[]`): `Relationship`
+Creates a new relationship between nodes, and returns it as a new Relationship instance.
+Both nodes will know each other.
 ```
-const A = new Relation().setRelation('language', 'English', 'Korean', 'Japanese')
-const B = A.setRelation('English', 'US', 'France', 'Italy')
+const A = new Relationship().setReferTo('language', 'English', 'Korean', 'Japanese')
+const B = A.setReferBoth('English', 'US', 'France', 'Italy')
 ```
-### getRelation(...nodes: `RelationNode[]`): `Relation`
-Only the nodes that are related to the node received by the parameter are filtered and returned in a new relation instance.
+### getRelation(target: `RelationNode[]`, depth?: `number` = -1): `Relationship`
+Only the nodes that are related to the node received by the parameter are filtered and returned in a new Relationship instance.
+You can control calculation depth relationship with depth paramter. If depth parameter are negative, it's will be calculte all relationship between nodes in instance. Depth paramter default value is -1.
 ```
 A.getRelation('language').nodes // language, English, Korean, Japanese
 B.getRelation('English').nodes // language, English, US, France, Italy
 ```
-### getLegionRelation(...nodes: `RelationNode[]`): `Relation`
-Only groups of nodes that are associated with the node received by the parameter. Then make and return a new relation instance.
-```
-B.getLegionRelation('language').nodes // language, English, Korean, Japanese, US, France, Italy
-```
-### getNodes(...nodes: `RelationNode[]`): `RelationNode[]`
-Same as `relation.nodes`, but removes the node passed as a parameter.
+### getNodes(node: `RelationNode`): `RelationNode[]`
+Same as `(getter)nodes`, but removes the node passed as a parameter.
 ```
 B.getLegionRelation('language').getRelativeNodes('language') // English, Korean, Japanese, US, France, Italy
 ```
-### deleteRelation(target: `RelationNode`, ...nodes: `RelationNode[]`): `Relation`
-Deletes the relationship between nodes and returns it as a new relation instance.
+### unlinkTo(target: `RelationNode`, ...nodes: `RelationNode[]`): `Relationship`
+Deletes the relationship between nodes and returns it as a new Relationship instance.
+This is one-sided cut off between both nodes.
 ```
-B.deleteRelation('English', 'France')
+B.unlinkTo('English', 'France')
 ```
-### deleteNode(...nodes: `RelationNode[]`): `Relation`
-Delete the node. If the node associated with the deleted node is isolated, it is deleted together. Returns the result with a new relation instance.
+### unlinkBoth(target: `RelationNode`, ...nodes: `RelationNode[]`): `Relationship`
+Deletes the relationship between nodes and returns it as a new Relationship instance.
+Both nodes will cut off each other.
 ```
-B.deleteNode('language').nodes // English, US, France, Italy
+B.unlinkBoth('English', 'France')
+```
+### dropNode(...nodes: `RelationNode[]`): `Relationship`
+Delete the node. If the node associated with the deleted node is isolated, it is deleted together. Returns the result with a new Relationship instance.
+```
+B.dropNode('language').nodes // English, US, France, Italy
 ```
 ## Try it simply
 ```
-const relation = new Relation()
-                    .setRelation('language', 'English', 'Korean', 'Japanese')
-                    .setRelation('English', 'US', 'France', 'Italy')
+const rs = new Relationship()
+                    .setReferTo('language', 'English', 'Korean', 'Japanese')
+                    .setReferBoth('English', 'US', 'France', 'Italy')
 
-console.log(`Languages: ${ relation.getRelativeNodes('language') }`)
-// Languages: English, Korean, Japanese
+console.log(`Languages: ${ rs.getRelation('language').getNodes('language') }`)
+// Languages: English, Korean, Japanese, US, France, Italy
 
-console.log(`English country: ${ relation.getRelation('English').deleteNode('language').getNodes('English') }`)
+console.log(`English country: ${ rs.getRelation('English').dropNode('language').getNodes('English') }`)
 // English country: US, France, Italy 
 ```

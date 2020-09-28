@@ -1,8 +1,8 @@
 {
   "name": "node-relation",
-  "version": "2.0.6",
+  "version": "3.0.0",
   "description": "Manage strings that are related to each other.",
-  "main": "dist/NodeRelation.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack"
@@ -13,7 +13,7 @@
     "webpack": "4.44.1",
     "webpack-cli": "3.3.12",
     "@types/node": "12.12.2",
-    "typescript": "4.0.2",
-    "ts-loader": "8.0.3"
+    "typescript": "4.0.3",
+    "ts-loader": "8.0.4"
   }
 }

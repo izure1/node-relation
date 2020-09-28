@@ -3,13 +3,12 @@ const path = require('path')
 module.exports = {
     mode: 'production',
     entry: {
-        NodeRelation: path.join(__dirname, 'src', 'NodeRelation.ts')
+        index: path.join(__dirname, 'src', 'index.ts')
     },
     output: {
         path: path.join(__dirname, 'dist'),
         filename: '[name].js',
         libraryTarget: 'umd',
-        libraryExport: 'default',
         library: 'NodeRelation',
         globalObject: 'this'
     },
