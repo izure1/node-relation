@@ -8,6 +8,7 @@
     "build": "webpack"
   },
   "author": "izure <admin@izure.org>",
+  "homepage": "https://github.com/izure1/node-relation",
   "keywords": ["relationship", "manage", "group", "node"],
   "license": "MIT",
   "devDependencies": {
