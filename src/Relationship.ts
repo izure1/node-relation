@@ -4,7 +4,7 @@ type RelationData<T> = [T, Relation<T>]
 export class Relationship<T> {
     private readonly relationmap: Map<T, Relation<T>> = new Map
 
-    constructor(datas: RelationData<T>[]) {
+    constructor(datas: RelationData<T>[] = []) {
         this.relationmap = new Map(datas)
     }
 
