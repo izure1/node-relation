@@ -120,6 +120,19 @@ export class Relationship<T> {
     }
 
     /**
+     * 매개변수로 넘어온 모든 노드들이 서로와 관계를 맺습니다.
+     * @param nodes 서로 간 관계를 맺을 노드들입니다.
+     */
+    setReferAll(...nodes: T[]): Relationship<T> {
+        const newR: Relationship<T> = new Relationship(this.dataset)
+        for (const node of nodes) {
+            const relation: Relation<T> = newR.ensureRelation(node, ...nodes)
+            Relationship.drop(relation, node)
+        }
+        return newR
+    }
+
+    /**
      * 두 개의 릴레이션데이터 배열을 병합합니다.
      * 이는 두 개의 인스턴스를 병합하는데 사용하기에 좋습니다.
      * @param a 병합할 릴레이션데이터 배열입니다.
