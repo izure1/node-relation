@@ -25,9 +25,9 @@ const manager   = new Human('harris')
 // Create relationship
 let rs = new Relationship
 
-rs = rs.setReferBoth(john, paul, lawrence)
-rs = rs.setReferBoth(jacob, richard, collin)
 rs = rs.setReferTo(manager, john, jacob)
+rs = rs.setReferAll(john, paul, lawrence)
+rs = rs.setReferAll(jacob, richard, collin)
 
 console.log(rs.getRelation(manager, 1).getNodes(manager))
 console.log('manager: Here are the leaders of my team.')

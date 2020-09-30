@@ -129,7 +129,7 @@ class Human {
         this.name = name
     }
     sayHello() {
-        console.log(`Hello, my name is ${this.name}`)
+        console.log(`${this.name}: Hello, my name is ${this.name}`)
     }
 }
 
@@ -149,11 +149,11 @@ const manager   = new Human('harris')
 // Create relationship
 let rs: Relationship<Human> = new Relationship
 
-rs = rs.setReferBoth(john, paul, lawrence)
-rs = rs.setReferBoth(jacob, richard, collin)
 rs = rs.setReferTo(manager, john, jacob)
+rs = rs.setReferAll(john, paul, lawrence)
+rs = rs.setReferAll(jacob, richard, collin)
 
-console.log('manager: Here are the leaders of my team.')
+console.log(`${manager.name}: Here are the leaders of my team.`)
 rs.getRelation(manager, 1).getNodes(manager).forEach((leader: Human) => {
     leader.sayHello()
     console.log(`${leader.name}: And... these are my teammates.`)
