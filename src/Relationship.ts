@@ -184,7 +184,7 @@ export class Relationship<T> {
             depth = Number.MAX_SAFE_INTEGER
         }
         const testR: Relationship<T> = new Relationship(this.dataset)
-        const relationDataset: RelationData<T>[] = testR.getSearchedRelationDataset(source, depth)
+        const relationDataset: RelationData<T>[] = testR.getSearchedRelationDataset(source, --depth)
         return new Relationship(relationDataset)
     }
 

@@ -17,16 +17,20 @@ console.log(C.getRelation('e').nodes) // ['e', 'f']
 const D = C.setReferTo('e', 'a')
 console.log(D.getRelation('e').nodes) // ['a', 'b', 'c', 'd', 'e', 'f']
 ```
-## Easy start
----
-### Web brower
+# Install
+You can download in npm [node-relation](https://www.npmjs.com/package/node-relation).
+```
+npm install node-relation
+```
+# How to use
+## Web brower
 ```
 <script src="js/nodeRelation.js"></script>
 <script>
   const A = new NodeRelation.Relationship().setReferTo('a', 'b', 'c')
 </script>
 ```
-### Front-end
+## Front-end
 ```
 import { Relationship } from 'node-relation'
 
@@ -38,14 +42,7 @@ const { Relationship } = require('node-relation')
 
 const A = new Relationship().setReferTo('a', 'b', 'c')
 ```
----
-## Install
-You can download in npm [node-relation](https://www.npmjs.com/package/node-relation).
-```
-npm install node-relation
-```
----
-## Methods
+# Methods
 The data inside the instance is immutable.
 The method does not modify the data inside, it returns the result of the calculation as a new instance.
 
@@ -110,15 +107,58 @@ Delete the node. If the node associated with the deleted node is isolated, it is
 ```
 B.dropNode('language').nodes // English, US, France, Italy
 ```
-## Try it simply
+# Try it simply
 ```
 const rs = new Relationship()
-                    .setReferTo('language', 'English', 'Korean', 'Japanese')
-                    .setReferBoth('English', 'US', 'France', 'Italy')
+            .setReferTo('language', 'English', 'Korean', 'Japanese')
+            .setReferBoth('English', 'US', 'France', 'Italy')
 
 console.log(`Languages: ${ rs.getRelation('language').getNodes('language') }`)
 // Languages: English, Korean, Japanese, US, France, Italy
 
 console.log(`English country: ${ rs.getRelation('English').dropNode('language').getNodes('English') }`)
 // English country: US, France, Italy 
+```
+# Applying (Advanced Course, with Typescript)
+```
+import { Relationship } from 'node-relation'
+
+class Human {
+    name: string
+    constructor(name: string) {
+        this.name = name
+    }
+    sayHello() {
+        console.log(`Hello, my name is ${this.name}`)
+    }
+}
+
+// Team A
+const john      = new Human('john') // leader
+const paul      = new Human('paul')
+const lawrence  = new Human('lawrence')
+
+// Team B
+const jacob     = new Human('jacob') // leader
+const richard   = new Human('richard')
+const collin    = new Human('collin')
+
+// Manager
+const manager   = new Human('harris')
+
+// Create relationship
+let rs: Relationship<Human> = new Relationship
+
+rs = rs.setReferBoth(john, paul, lawrence)
+rs = rs.setReferBoth(jacob, richard, collin)
+rs = rs.setReferTo(manager, john, jacob)
+
+console.log('manager: Here are the leaders of my team.')
+rs.getRelation(manager, 1).getNodes(manager).forEach((leader: Human) => {
+    leader.sayHello()
+    console.log(`${leader.name}: And... these are my teammates.`)
+    rs.getRelation(leader).getNodes(leader).forEach((member: Human) => {
+        member.sayHello()
+    })
+})
 ```
