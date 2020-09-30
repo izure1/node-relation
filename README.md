@@ -78,6 +78,12 @@ Both nodes will know each other.
 const A = new Relationship().setReferTo('language', 'English', 'Korean', 'Japanese')
 const B = A.setReferBoth('English', 'US', 'France', 'Italy')
 ```
+### setReferAll(...nodes: `RelationNode[]`): `Relationship`
+Creates a new relationship between all each other nodes, and returns it as a new Relationship instance.
+All nodes will know each others.
+```
+const Team = new Relationship().setReferAll('john', 'harris', 'richard')
+```
 ### getRelation(target: `RelationNode[]`, depth?: `number` = -1): `Relationship`
 Only the nodes that are related to the node received by the parameter are filtered and returned in a new Relationship instance.
 You can control calculation depth relationship with depth paramter. If depth parameter are negative, it's will be calculte all relationship between nodes in instance. Depth paramter default value is -1.
