@@ -1,6 +1,6 @@
 # node-relation
 
-This module helps you manage string, numbers as a group.
+This module helps you manage string, numbers, object as a group.
 Check the code.
 ```
 import { Relationship } from 'node-relation'
@@ -16,6 +16,27 @@ console.log(C.getRelation('e').nodes) // ['e', 'f']
 
 const D = C.setReferTo('e', 'a')
 console.log(D.getRelation('e').nodes) // ['a', 'b', 'c', 'd', 'e', 'f']
+```
+## Easy start
+---
+### Web brower
+```
+<script src="js/nodeRelation.js"></script>
+<script>
+  const A = new NodeRelation.Relationship().setReferTo('a', 'b', 'c')
+</script>
+```
+### Front-end
+```
+import { Relationship } from 'node-relation'
+
+const A = new Relationship().setReferTo('a', 'b', 'c')
+```
+## Back-end
+```
+const { Relationship } = require('node-relation')
+
+const A = new Relationship().setReferTo('a', 'b', 'c')
 ```
 ---
 ## Install
