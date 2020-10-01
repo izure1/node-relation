@@ -62,12 +62,24 @@ export class Relationship<T> {
 
     /** 인스턴스에 존재하는 모든 노드 목록을 배열로 반환합니다. */
     get nodes(): T[] {
-        let nodes: T[] = []
+        const nodes: T[] = []
         for (const [ source, dists ] of this.relationmap) {
             Relationship.add(nodes, source)
             Relationship.add(nodes, ...dists)
         }
         return nodes
+    }
+
+    /** 인스턴스에 존재하는 모든 노드 목록을 Set 인스턴스로 반환합니다. */
+    get nodeset(): Set<T> {
+        const set: Set<T> = new Set
+        for (const [ source, dists ] of this.relationmap) {
+            set.add(source)
+            for (const dist of dists) {
+                set.add(dist)
+            }
+        }
+        return set
     }
 
     /**
@@ -76,6 +88,16 @@ export class Relationship<T> {
      */
     getNodes(node: T): T[] {
         return Relationship.drop(this.nodes, node)
+    }
+
+    /**
+     * 인스턴스에 존재하는 노드 목록을 Set 인스턴스로 반환합니다. relation.nodeset과 비슷하지만, 매개변수로 전달한 노드는 제거 됩니다.
+     * @param node Set 인스턴스에 포함되지 않을 노드입니다.
+     */
+    getNodeset(node: T): Set<T> {
+        const set: Set<T> = this.nodeset
+        set.delete(node)
+        return set
     }
 
     /**

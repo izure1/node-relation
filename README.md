@@ -47,7 +47,7 @@ The data inside the instance is immutable.
 The method does not modify the data inside, it returns the result of the calculation as a new instance.
 
 ### constructor(dataset?: `RelationData[]`): `Relationship`
-You can pass dataset paramter to init this instance.
+You can pass dataset parameter to init this instance.
 The `RelationData` is type of 2-dimentional array. Check dataset getter description.
 ```
 const rs = new Relationship([['language', ['English', 'Korean', 'Japanese']]])
@@ -64,6 +64,12 @@ Get all nodes from the instance.
 ```
 const rs = new Relation().setReferTo('a', 'b').setReferTo('b', 'c')
 rs.nodes // a, b, c
+```
+### `(getter)` nodeset: `Set<RelationNode>`
+Get all nodes as Set object from the instance.
+```
+const rs = new Relation().setReferTo('a', 'b').setReferTo('b', 'c')
+rs.nodeset // Set<['a', 'b', 'c']>
 ```
 ### setReferTo(target: `RelationNode`, ...nodes: `RelationNode[]`): `Relationship`
 Creates a new refer between nodes, and returns it as a Relationship instance.
@@ -86,7 +92,7 @@ const Team = new Relationship().setReferAll('john', 'harris', 'richard')
 ```
 ### getRelation(target: `RelationNode[]`, depth?: `number` = -1): `Relationship`
 Only the nodes that are related to the node received by the parameter are filtered and returned in a new Relationship instance.
-You can control calculation depth relationship with depth paramter. If depth parameter are negative, it's will be calculte all relationship between nodes in instance. Depth paramter default value is -1.
+You can control calculation depth relationship with depth parameter. If depth parameter are negative, it's will be calculte all relationship between nodes in instance. Depth parameter default value is -1.
 ```
 A.getRelation('language').nodes // language, English, Korean, Japanese
 B.getRelation('English').nodes // language, English, US, France, Italy
@@ -94,7 +100,12 @@ B.getRelation('English').nodes // language, English, US, France, Italy
 ### getNodes(node: `RelationNode`): `RelationNode[]`
 Same as `(getter)nodes`, but removes the node passed as a parameter.
 ```
-B.getLegionRelation('language').getRelativeNodes('language') // English, Korean, Japanese, US, France, Italy
+B.getRelation('language').getNodes('language') // English, Korean, Japanese, US, France, Italy
+```
+### getNodeset(node: `RelationNode`): `Set<RelationNode>`
+Same as `(getter)nodeset`, but removes the node passed as a parameter.
+```
+B.getRelation('language').getNodeset('language') // Set<['English', 'Korean', 'Japanese', 'US', 'France', 'Italy']>
 ```
 ### unlinkTo(target: `RelationNode`, ...nodes: `RelationNode[]`): `Relationship`
 Deletes the relationship between nodes and returns it as a new Relationship instance.
