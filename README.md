@@ -23,7 +23,7 @@ You can download in npm [node-relation](https://www.npmjs.com/package/node-relat
 npm install node-relation
 ```
 # How to use
-## Web brower
+## Web browser
 ```
 <script src="js/nodeRelation.js"></script>
 <script>
@@ -50,34 +50,34 @@ The method does not modify the data inside, it returns the result of the calcula
 You can pass dataset parameter to init this instance.
 The `RelationData` is type of 2-dimentional array. Check dataset getter description.
 ```
-const rs = new Relationship([['language', ['English', 'Korean', 'Japanese']]])
-const copy = new Relationship(rs.dataset)
+const state = new Relationship([['language', ['English', 'Korean', 'Japanese']]])
+const copy = new Relationship(state.dataset)
 ```
 ### `(getter)` dataset: `RelationData[]`
 Returns as 2-dimentional array of relationships between nodes in the instance. Relationships are returned to saveable data-type(json).
 ```
-const rs = new Relationship().setReferTo('a', 'b').setReferTo('b', 'c', 'd')
-rs.dataset // [ [a,['b']], [b,['c', 'd']] ]
+const state = new Relationship().setReferTo('a', 'b').setReferTo('b', 'c', 'd')
+state.dataset // [ [a,['b']], [b,['c', 'd']] ]
 ```
 ### `(getter)` nodes: `RelationNode[]`
 Get all nodes from the instance.
 ```
-const rs = new Relation().setReferTo('a', 'b').setReferTo('b', 'c')
-rs.nodes // a, b, c
+const state = new Relation().setReferTo('a', 'b').setReferTo('b', 'c')
+state.nodes // a, b, c
 ```
 ### `(getter)` nodeset: `Set<RelationNode>`
 Get all nodes as Set object from the instance.
 ```
-const rs = new Relation().setReferTo('a', 'b').setReferTo('b', 'c')
-rs.nodeset // Set<['a', 'b', 'c']>
+const state = new Relation().setReferTo('a', 'b').setReferTo('b', 'c')
+state.nodeset // Set<['a', 'b', 'c']>
 ```
-### setReferTo(target: `RelationNode`, ...nodes: `RelationNode[]`): `Relationship`
+### setReferTo(source: `RelationNode`, ...dists: `RelationNode[]`): `Relationship`
 Creates a new refer between nodes, and returns it as a Relationship instance.
 This is one-sided relationship between both nodes.
 ```
 const A = new Relationship().setReferTo('language', 'English', 'Korean', 'Japanese')
 ```
-### setReferBoth(target: `RelationNode`, ...nodes: `RelationNode[]`): `Relationship`
+### setReferBoth(a: `RelationNode`, ...b: `RelationNode[]`): `Relationship`
 Creates a new relationship between nodes, and returns it as a new Relationship instance.
 Both nodes will know each other.
 ```
@@ -90,7 +90,7 @@ All nodes will know each others.
 ```
 const Team = new Relationship().setReferAll('john', 'harris', 'richard')
 ```
-### getRelation(target: `RelationNode[]`, depth?: `number` = -1): `Relationship`
+### getRelation(source: `RelationNode[]`, depth?: `number` = -1): `Relationship`
 Only the nodes that are related to the node received by the parameter are filtered and returned in a new Relationship instance.
 You can control calculation depth relationship with depth parameter. If depth parameter are negative, it's will be calculte all relationship between nodes in instance. Depth parameter default value is -1.
 ```
@@ -107,13 +107,13 @@ Same as `(getter)nodeset`, but removes the node passed as a parameter.
 ```
 B.getRelation('language').getNodeset('language') // Set<['English', 'Korean', 'Japanese', 'US', 'France', 'Italy']>
 ```
-### unlinkTo(target: `RelationNode`, ...nodes: `RelationNode[]`): `Relationship`
+### unlinkTo(source: `RelationNode`, ...dists: `RelationNode[]`): `Relationship`
 Deletes the relationship between nodes and returns it as a new Relationship instance.
 This is one-sided cut off between both nodes.
 ```
 B.unlinkTo('English', 'France')
 ```
-### unlinkBoth(target: `RelationNode`, ...nodes: `RelationNode[]`): `Relationship`
+### unlinkBoth(a: `RelationNode`, ...b: `RelationNode[]`): `Relationship`
 Deletes the relationship between nodes and returns it as a new Relationship instance.
 Both nodes will cut off each other.
 ```
@@ -124,19 +124,26 @@ Delete the node. If the node associated with the deleted node is isolated, it is
 ```
 B.dropNode('language').nodes // English, US, France, Italy
 ```
+### hasNode(node: `RelationNode`): `Boolean`
+Returns whether the instance contains that node.
+```
+const hasKorean = B.hasNode('korean') // true
+```
+### clear(): `void`
+Destroy the data in the instance. It is used for garbage collector.
 # Try it simply
 ```
-const rs = new Relationship()
+const state = new Relationship()
             .setReferTo('language', 'English', 'Korean', 'Japanese')
             .setReferBoth('English', 'US', 'France', 'Italy')
 
-console.log(`Languages: ${ rs.getRelation('language').getNodes('language') }`)
+console.log(`Languages: ${ state.getRelation('language').getNodes('language') }`)
 // Languages: English, Korean, Japanese, US, France, Italy
 
-console.log(`English country: ${ rs.getRelation('English').dropNode('language').getNodes('English') }`)
+console.log(`English country: ${ state.getRelation('English').dropNode('language').getNodes('English') }`)
 // English country: US, France, Italy 
 ```
-# Applying (Advanced Course, with Typescript)
+# Applying (Advanced usage, with Typescript)
 ```
 import { Relationship } from 'node-relation'
 
@@ -164,17 +171,17 @@ const collin    = new Human('collin')
 const manager   = new Human('harris')
 
 // Create relationship
-let rs: Relationship<Human> = new Relationship
+let state: Relationship<Human> = new Relationship
 
-rs = rs.setReferTo(manager, john, jacob)
-rs = rs.setReferAll(john, paul, lawrence)
-rs = rs.setReferAll(jacob, richard, collin)
+state = state.setReferTo(manager, john, jacob)
+             .setReferAll(john, paul, lawrence)
+             .setReferAll(jacob, richard, collin)
 
 console.log(`${manager.name}: Here are the leaders of my team.`)
-rs.getRelation(manager, 1).getNodes(manager).forEach((leader: Human) => {
+state.getRelation(manager, 1).getNodes(manager).forEach((leader: Human) => {
     leader.sayHello()
     console.log(`${leader.name}: And... these are my teammates.`)
-    rs.getRelation(leader).getNodes(leader).forEach((member: Human) => {
+    state.getRelation(leader).getNodes(leader).forEach((member: Human) => {
         member.sayHello()
     })
 })

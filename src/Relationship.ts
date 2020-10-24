@@ -55,12 +55,15 @@ export class Relationship<T> {
         return array
     }
 
-    /** 릴레이션 정보를 저장가능한 형태로 반환합니다. */
+    /**
+     * Returns as 2-dimentional array of relationships between nodes in the instance.
+     * Relationships are returned to saveable data-type(json).
+     */
     get dataset(): RelationData<T>[] {
         return Array.from(this.relationmap)
     }
 
-    /** 인스턴스에 존재하는 모든 노드 목록을 배열로 반환합니다. */
+    /** Get all nodes from the instance. */
     get nodes(): T[] {
         const nodes: T[] = []
         for (const [ source, dists ] of this.relationmap) {
@@ -70,7 +73,7 @@ export class Relationship<T> {
         return nodes
     }
 
-    /** 인스턴스에 존재하는 모든 노드 목록을 Set 인스턴스로 반환합니다. */
+    /** Get all nodes as Set object from the instance. */
     get nodeset(): Set<T> {
         const set: Set<T> = new Set
         for (const [ source, dists ] of this.relationmap) {
@@ -83,16 +86,16 @@ export class Relationship<T> {
     }
 
     /**
-     * 인스턴스에 존재하는 노드 목록을 배열로 반환합니다. relation.nodes와 비슷하지만, 매개변수로 전달한 노드는 제거 됩니다.
-     * @param node 배열에 포함되지 않을 노드입니다.
+     * Same as `(getter)nodes`, but removes the node passed as a parameter.
+     * @param node Nodes that will not be included in the array.
      */
     getNodes(node: T): T[] {
         return Relationship.drop(this.nodes, node)
     }
 
     /**
-     * 인스턴스에 존재하는 노드 목록을 Set 인스턴스로 반환합니다. relation.nodeset과 비슷하지만, 매개변수로 전달한 노드는 제거 됩니다.
-     * @param node Set 인스턴스에 포함되지 않을 노드입니다.
+     * Same as `(getter)nodeset`, but removes the node passed as a parameter.
+     * @param node Nodes that will not be included in the Set instance.
      */
     getNodeset(node: T): Set<T> {
         const set: Set<T> = this.nodeset
@@ -116,10 +119,10 @@ export class Relationship<T> {
     }
 
     /**
-     * 해당 노드를 목표 노드를 참조합니다. 이는 단방향적인 관계입니다.
-     * 대상 노드는 대상 노드가 자신을 참조하는지 모를 것입니다.
-     * @param source    해당 노드입니다.
-     * @param dists     대상 노드입니다.
+     * Creates a new refer between nodes, and returns it as a Relationship instance.
+     * This is one-sided relationship between both nodes.
+     * @param source    The source node.
+     * @param dists     The target nodes.
      */
     setReferTo(source: T, ...dists: T[]): Relationship<T> {
         const newR: Relationship<T> = new Relationship(this.dataset)
@@ -128,9 +131,10 @@ export class Relationship<T> {
     }
 
     /**
-     * 해당 노드와 대상 노드가 서로를 참조합니다. 이는 양방향적인 관계입니다.
-     * @param a     해당 노드입니다.
-     * @param b     대상 노드입니다.
+     * Creates a new relationship between nodes, and returns it as a new Relationship instance.
+     * Both nodes will know each other.
+     * @param a     Node A to refer to node B.
+     * @param b     Node B to refer to node A.
      */
     setReferBoth(a: T, ...b: T[]): Relationship<T> {
         const newR: Relationship<T> = new Relationship(this.dataset)
@@ -142,8 +146,9 @@ export class Relationship<T> {
     }
 
     /**
-     * 매개변수로 넘어온 모든 노드들이 서로와 관계를 맺습니다.
-     * @param nodes 서로 간 관계를 맺을 노드들입니다.
+     * Creates a new relationship between all each other nodes, and returns it as a new Relationship instance.
+     * All nodes will know each others.
+     * @param nodes Nodes to relate to each other.
      */
     setReferAll(...nodes: T[]): Relationship<T> {
         const newR: Relationship<T> = new Relationship(this.dataset)
@@ -209,10 +214,10 @@ export class Relationship<T> {
     }
 
     /**
-     * 해당 노드와 참조를 맺고 있는 모든 노드를 새로운 릴레이션으로 만들어 반환합니다.
-     * 깊이 탐색이 가능합니다. 깊이 탐색 기능을 사용하면, 참조의 참조를 연달아 계산하여 반환합니다.
-     * @param source 해당 노드입니다.
-     * @param depth 탐색할 깊이입니다. 이 수치만큼 연산합니다. 숫자가 클 수록, 더 깊게 탐색합니다. 기본값은 -1입니다. 음수를 사용하면 횟수 제한없이 탐색합니다.
+     * Only the nodes that are related to the node received by the parameter are filtered and returned in a new Relationship instance.
+     * You can control calculation depth relationship with depth parameter.
+     * @param source The source node.
+     * @param depth If depth parameter are negative, it's will be calculte all relationship between nodes in instance. Depth parameter default value is -1.
      */
     getRelation(source: T, depth: number = -1): Relationship<T> {
         if (depth < 0) {
@@ -236,10 +241,10 @@ export class Relationship<T> {
     }
 
     /**
-     * 해당 노드가 대상 노드와의 관계를 끊습니다.
-     * 만일 서로 참조하고 있던 관계라면 한 쪽만이 끊깁니다.
-     * @param source 해당 노드입니다.
-     * @param dists 대상 노드입니다.
+     * Deletes the relationship between nodes and returns it as a new Relationship instance.
+     * This is one-sided cut off between both nodes.
+     * @param source The source node.
+     * @param dists The target nodes.
      */
     unlinkTo(source: T, ...dists: T[]): Relationship<T> {
         const newR: Relationship<T> = new Relationship(this.dataset)
@@ -248,9 +253,10 @@ export class Relationship<T> {
     }
 
     /**
-     * 해당 노드와 대상 노드가 서로간의 관계를 끊습니다.
-     * @param a 해당 노드입니다.
-     * @param b 대상 노드입니다.
+     * Deletes the relationship between nodes and returns it as a new Relationship instance.
+     * Both nodes will cut off each other.
+     * @param a Node A to unink from node B.
+     * @param b Node B to unink from node A.
      */
     unlinkBoth(a: T, ...b: T[]): Relationship<T> {
         const newR: Relationship<T> = new Relationship(this.dataset)
@@ -262,8 +268,9 @@ export class Relationship<T> {
     }
 
     /**
-     * 인스턴스에서 해당 노드를 완전히 삭제합니다. 해당 노드는 가비지컬렉터가 수집해갈 것입니다.
-     * @param nodes 해당 노드입니다.
+     * Delete the node. If the node associated with the deleted node is isolated, it is deleted together.
+     * Returns the result with a new Relationship instance.
+     * @param nodes Nodes to be deleted.
      */
     dropNode(...nodes: T[]): Relationship<T> {
         const newR: Relationship<T> = new Relationship(this.dataset)
@@ -277,8 +284,8 @@ export class Relationship<T> {
     }
 
     /**
-     * 인스턴스에 해당 노드가 포함되어있는지 여부를 반환합니다.
-     * @param node 검색할 노드입니다.
+     * Returns whether the instance contains that node.
+     * @param node Node to find.
      */
     hasNode(node: T): boolean {
         let isExists: boolean = this.relationmap.has(node)
@@ -290,7 +297,7 @@ export class Relationship<T> {
         return isExists
     }
 
-    /** 해당 인스턴스의 모든 데이터를 초기화합니다. */
+    /** Destroy the data in the instance. It is used for garbage collector. */
     clear(): void {
         this.relationmap.clear()
     }

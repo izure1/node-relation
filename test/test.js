@@ -23,18 +23,19 @@ const collin    = new Human('collin')
 const manager   = new Human('harris')
 
 // Create relationship
-let rs = new Relationship
+let state = new Relationship
 
-rs = rs.setReferTo(manager, john, jacob)
-rs = rs.setReferAll(john, paul, lawrence)
-rs = rs.setReferAll(jacob, richard, collin)
+state = state.setReferTo(manager, john, jacob)
+            .setReferAll(john, paul, lawrence)
+            .setReferAll(jacob, richard, collin)
 
-console.log(rs.getRelation(manager, 1).getNodes(manager))
+console.log(state.getRelation(manager, 1).getNodes(manager))
 console.log('manager: Here are the leaders of my team.')
-rs.getRelation(manager, 1).getNodes(manager).forEach((leader) => {
+
+state.getRelation(manager, 1).getNodes(manager).forEach((leader) => {
     leader.sayHello()
     console.log(`${leader.name}: And... these are my teammates.`)
-    rs.getRelation(leader).getNodes(leader).forEach((member) => {
+    state.getRelation(leader).getNodes(leader).forEach((member) => {
         member.sayHello()
     })
 })
