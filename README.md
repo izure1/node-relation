@@ -169,7 +169,7 @@ let state: Relationship<ServerName|User> = new Relationship
 state = state.setReferTo('server-a', userA, userB)
 state = state.setReferTo('server-b', userC)
 
-console.log( state..getRelation('server-b').getAmbientNodes('server-b') ) // userC
+console.log( state.getRelation('server-b').getAmbientNodes('server-b') ) // userC
 ```
 ```
 import { Relationship } from 'node-relation'
