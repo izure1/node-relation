@@ -1,6 +1,6 @@
 {
   "name": "node-relation",
-  "version": "3.2.1",
+  "version": "3.2.2",
   "description": "Manage strings, number, object that are related to each other.",
   "main": "dist/index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   },
   "author": "izure <admin@izure.org>",
   "homepage": "https://github.com/izure1/node-relation",
-  "keywords": ["relationship", "manage", "group", "node"],
+  "keywords": ["relationship", "manage", "group", "node", "linked list"],
   "license": "MIT",
   "devDependencies": {
     "webpack": "4.44.1",
