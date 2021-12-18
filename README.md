@@ -145,6 +145,29 @@ console.log(`English country: ${ state.getRelation('English').dropNode('language
 ```
 # Applying (Advanced usage, with Typescript)
 ```
+// The data structure what you want
+// {
+//   'server-a': [userA, userB],
+//   'server-b': [userC]
+// }
+
+import { Relationship } from 'node-relation'
+
+type ServerName = 'server-a' | 'server-b'
+class User {}
+
+const userA = new User
+const userB = new User
+const userC = new User
+
+let state: Relationship<ServerName|User> = new Relationship
+
+state = state.setReferTo('server-a', userA, userB)
+state = state.setReferTo('server-b', userC)
+
+console.log( state.getNodes('server-b') ) // userC
+```
+```
 import { Relationship } from 'node-relation'
 
 class Human {

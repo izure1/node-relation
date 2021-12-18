@@ -1,4 +1,4 @@
-var { Relationship } = require('../dist/index')
+var { Relationship } = require('../dist/raw')
 
 class Human {
     constructor(name) {
@@ -26,8 +26,9 @@ const manager   = new Human('harris')
 let state = new Relationship
 
 state = state.setReferTo(manager, john, jacob)
-            .setReferAll(john, paul, lawrence)
-            .setReferAll(jacob, richard, collin)
+
+            state.setReferAll(john, paul, lawrence)
+            state.setReferAll(jacob, richard, collin)
 
 console.log(state.getRelation(manager, 1).getNodes(manager))
 console.log('manager: Here are the leaders of my team.')
