@@ -107,6 +107,10 @@ Same as `(getter)nodeset`, but removes the node passed as a parameter.
 ```
 B.getRelation('language').getNodeset('language') // Set<['English', 'Korean', 'Japanese', 'US', 'France', 'Italy']>
 ```
+### getAmbientNodes(node: `RelationNode`): `RelationNode[]`
+Alias to `getNodes`
+### getAmbientNodeset(node: `RelationNode`): `Set<RelationNode>`
+Alias to `getNodeset`
 ### unlinkTo(source: `RelationNode`, ...dists: `RelationNode[]`): `Relationship`
 Deletes the relationship between nodes and returns it as a new Relationship instance.
 This is one-sided cut off between both nodes.
@@ -137,10 +141,10 @@ const state = new Relationship()
             .setReferTo('language', 'English', 'Korean', 'Japanese')
             .setReferBoth('English', 'US', 'France', 'Italy')
 
-console.log(`Languages: ${ state.getRelation('language').getNodes('language') }`)
+console.log(`Languages: ${ state.getRelation('language').getAmbientNodes('language') }`)
 // Languages: English, Korean, Japanese, US, France, Italy
 
-console.log(`English country: ${ state.getRelation('English').dropNode('language').getNodes('English') }`)
+console.log(`English country: ${ state.getRelation('English').dropNode('language').getAmbientNodes('English') }`)
 // English country: US, France, Italy 
 ```
 # Applying (Advanced usage, with Typescript)
@@ -165,7 +169,7 @@ let state: Relationship<ServerName|User> = new Relationship
 state = state.setReferTo('server-a', userA, userB)
 state = state.setReferTo('server-b', userC)
 
-console.log( state.getNodes('server-b') ) // userC
+console.log( state..getRelation('server-b').getAmbientNodes('server-b') ) // userC
 ```
 ```
 import { Relationship } from 'node-relation'
@@ -201,10 +205,10 @@ state = state.setReferTo(manager, john, jacob)
              .setReferAll(jacob, richard, collin)
 
 console.log(`${manager.name}: Here are the leaders of my team.`)
-state.getRelation(manager, 1).getNodes(manager).forEach((leader: Human) => {
+state.getRelation(manager, 1).getAmbientNodes(manager).forEach((leader: Human) => {
     leader.sayHello()
     console.log(`${leader.name}: And... these are my teammates.`)
-    state.getRelation(leader).getNodes(leader).forEach((member: Human) => {
+    state.getRelation(leader).getAmbientNodes(leader).forEach((member: Human) => {
         member.sayHello()
     })
 })

@@ -1,6 +1,6 @@
 {
   "name": "node-relation",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "description": "Manage strings, number, object that are related to each other.",
   "main": "dist/index.js",
   "scripts": {

@@ -108,6 +108,22 @@ export class Relationship<T> {
   }
 
   /**
+   * Alias to `getNodes`
+   * @param node Nodes that will not be included in the array.
+   */
+  getAmbientNodes(node: T): T[] {
+    return this.getNodes(node)
+  }
+
+  /**
+   * Alias to `getNodeset`
+   * @param node Nodes that will not be included in the Set instance.
+   */
+  getAmbientNodeset(node: T): T[] {
+    return this.getNodes(node)
+  }
+
+  /**
    * 해당 노드와 관련있는 릴레이션을 반환합니다. 릴레이션이 없다면 생성하고 반환합니다.
    * @param source 해당 노드입니다.
    */
