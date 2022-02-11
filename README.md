@@ -165,13 +165,21 @@ A.from('language').nodes // language, English, Korean, Japanese
 B.from('English').nodes // language, English, US, France, Italy
 ```
 
+#### where(filter: (node: `RelationNode`, i: `number`, array: `RelationNode[]`) => `boolean`): `Relationship`
+
+Returns a new relationship instance with only nodes that meet the conditions.
+
+```javascript
+A.where((v) => v.includes('Kor')).nodes // Korean
+```
+
 #### without(...nodes: `RelationNode[]`): `RelationNode[]`
 
 Returns the remaining nodes except those received as parameters from the current relationship instance.
 
 ```javascript
-A.from('language').without('language').nodes // English, Korean, Japanese
-A.without('language').from('language').nodes // Empty
+A.from('language').without('language') // English, Korean, Japanese
+A.without('language').from('language') // Empty
 ```
 
 #### unlinkTo(source: `RelationNode`, ...targets: `RelationNode[]`): `Relationship`
