@@ -32,7 +32,7 @@ npm install node-relation
 ### Browser (umd)
 
 ```html
-<script src="'https://cdn.jsdelivr.net/npm/node-relation@latest/dist/umd/index.min.js'"></script>
+<script src="https://cdn.jsdelivr.net/npm/node-relation@latest/dist/umd/index.min.js"></script>
 <script>
   const A = new NodeRelation.Relationship().to('a', 'b', 'c')
 </script>
