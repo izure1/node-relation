@@ -1,5 +1,7 @@
 # node-relation
 
+[![jsdelivr](https://data.jsdelivr.com/v1/package/npm/node-relation/badge)](https://www.jsdelivr.com/package/npm/node-relation)
+
 This module helps you manage string, numbers, object as a group.
 Check the code.
 
