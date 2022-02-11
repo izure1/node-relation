@@ -219,7 +219,7 @@ export class Relationship<T> {
   where(filter: (node: T, i: number, array: T[]) => boolean): this {
     const clone = this.copy
     const targets = clone.nodes.filter((v, i, a) => !filter(v, i, a))
-    clone.drop(...targets)
+    Relationship.prototype.drop.call(clone, ...targets)
     return clone
   }
 
