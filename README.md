@@ -41,7 +41,7 @@ npm install node-relation
 ### Browser (esnext)
 
 ```javascript
-import { Relationship } from 'node-relation/dist/module/index.js'
+import { Relationship } from 'node-relation/dist/esm/index.js'
 ```
 
 ### Node.js

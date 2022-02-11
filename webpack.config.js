@@ -21,8 +21,8 @@ const esnext = {
     outputModule: true
   },
   entry: {
-    'module/index': path.join(__dirname, 'src', 'index.ts'),
-    'module/raw/index': path.join(__dirname, 'src', 'raw', 'index.ts')
+    'esm/index': path.join(__dirname, 'src', 'index.ts'),
+    'esm/raw/index': path.join(__dirname, 'src', 'raw', 'index.ts')
   },
   output: {
     path: path.join(__dirname, 'dist'),
