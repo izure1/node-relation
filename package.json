@@ -1,6 +1,6 @@
 {
   "name": "node-relation",
-  "version": "4.0.0-alpha.2",
+  "version": "4.0.0",
   "description": "Manage strings, number, object that are related to each other.",
   "main": "dist/umd/index.js",
   "module": "dist/esm/index.js",
