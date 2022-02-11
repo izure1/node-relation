@@ -1,9 +1,7 @@
-import { Relationship as RawRelationship, RelationData } from './raw/Relationship'
+import { Relationship as RawRelationship, RelationData } from './raw/Relation'
 
-export class Relationship<T> extends RawRelationship<T> {
-  constructor(data: RelationData<T>[] = []) {
-    super(data)
-  }
+export declare class Relationship<T> extends RawRelationship<T> {
+  constructor(data: RelationData<T>[])
 
   /**
    * Creates a new refer between nodes, and returns it as a Relationship instance.
@@ -11,9 +9,7 @@ export class Relationship<T> extends RawRelationship<T> {
    * @param source    The source node.
    * @param targets     The target nodes.
    */
-  to(source: T, ...targets: T[]): this {
-    return super.to.call(this.copy, source, ...targets)
-  }
+  to(source: T, ...targets: T[]): this
 
   /**
    * Creates a new relationship between nodes, and returns it as a new Relationship instance.
@@ -21,18 +17,14 @@ export class Relationship<T> extends RawRelationship<T> {
    * @param a     Node A to refer to node B.
    * @param b     Node B to refer to node A.
    */
-  both(a: T, ...b: T[]): this {
-    return super.both.call(this.copy, a, ...b)
-  }
+  both(a: T, ...b: T[]): this
 
   /**
    * Creates a new relationship between all each other nodes, and returns it as a new Relationship instance.
    * All nodes will know each others.
    * @param nodes Nodes to relate to each other.
    */
-  all(...nodes: T[]): this {
-    return super.all.call(this.copy, ...nodes)
-  }
+  all(...nodes: T[]): this
 
   /**
    * Deletes the relationship between nodes and returns it as a new Relationship instance.
@@ -40,9 +32,7 @@ export class Relationship<T> extends RawRelationship<T> {
    * @param source The source node.
    * @param targets The target nodes.
    */
-  unlinkTo(source: T, ...targets: T[]): this {
-    return super.unlinkTo.call(this.copy, source, ...targets)
-  }
+  unlinkTo(source: T, ...targets: T[]): this
 
   /**
    * Deletes the relationship between nodes and returns it as a new Relationship instance.
@@ -50,16 +40,12 @@ export class Relationship<T> extends RawRelationship<T> {
    * @param a Node A to unlink from node B.
    * @param b Node B to unlink from node A.
    */
-  unlinkBoth(a: T, ...b: T[]): this {
-    return super.unlinkBoth.call(this.copy, a, ...b)
-  }
+  unlinkBoth(a: T, ...b: T[]): this
 
   /**
    * Delete the node. If the node associated with the deleted node is isolated, it is deleted together.
    * Returns the result with a new Relationship instance.
    * @param nodes Nodes to be deleted.
    */
-  drop(...nodes: T[]): this {
-    return super.drop.call(this.copy, ...nodes)
-  }
+  drop(...nodes: T[]): this
 }

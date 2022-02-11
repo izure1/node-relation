@@ -1,11 +1,11 @@
-type Relation<T> = T[]
-type RelationData<T> = [T, Relation<T>]
+export type Relation<T> = T[]
+export type RelationData<T> = [T, Relation<T>]
 
 export class Relationship<T> {
-  private readonly relationmap: Map<T, Relation<T>>
+  protected readonly __relations: Map<T, Relation<T>>
 
-  constructor(datas: RelationData<T>[] = []) {
-    this.relationmap = new Map(datas)
+  constructor(data: RelationData<T>[] = []) {
+    this.__relations = new Map(data)
   }
 
   /**
@@ -13,8 +13,8 @@ export class Relationship<T> {
    * @param array 대상 배열입니다.
    * @param node 검색할 노드입니다.
    */
-  private static has<T>(array: T[], node: T): boolean {
-    return array.indexOf(node) !== -1
+  protected static has<T>(array: T[], node: T): boolean {
+    return array.includes(node)
   }
 
   /**
@@ -22,7 +22,7 @@ export class Relationship<T> {
    * @param array 대상 배열입니다.
    * @param nodes 추가할 노드입니다.
    */
-  private static add<T>(array: T[], ...nodes: T[]): T[] {
+  protected static add<T>(array: T[], ...nodes: T[]): T[] {
     for (const node of nodes) {
       if (!Relationship.has(array, node)) {
         array.push(node)
@@ -36,10 +36,10 @@ export class Relationship<T> {
    * @param array 대상 배열입니다.
    * @param node 제거할 노드입니다.
    */
-  private static drop<T>(array: T[], ...nodes: T[]): T[] {
+  protected static drop<T>(array: T[], ...nodes: T[]): T[] {
     for (const node of nodes) {
       if (Relationship.has(array, node)) {
-        const i: number = array.indexOf(node)
+        const i = array.indexOf(node)
         if (i !== -1) array.splice(i, 1)
       }
     }
@@ -50,89 +50,55 @@ export class Relationship<T> {
    * 배열을 초기화합니다.
    * @param array 초기화할 배열입니다.
    */
-  private static clear<T>(array: T[]): T[] {
+  protected static clear<T>(array: T[]): T[] {
     array.length = 0
     return array
   }
 
   /**
-   * Returns as 2-dimentional array of relationships between nodes in the instance.
+   * Returns as 2-dimensional array of relationships between nodes in the instance.
    * Relationships are returned to saveable data-type(json).
    */
   get dataset(): RelationData<T>[] {
-    return Array.from(this.relationmap)
+    return Array.from(this.__relations)
   }
 
   /** Get all nodes from the instance. */
   get nodes(): T[] {
     const nodes: T[] = []
-    for (const [ source, dists ] of this.relationmap) {
+    for (const [ source, targets ] of this.__relations) {
       Relationship.add(nodes, source)
-      Relationship.add(nodes, ...dists)
+      Relationship.add(nodes, ...targets)
     }
     return nodes
   }
 
   /** Get all nodes as Set object from the instance. */
   get nodeset(): Set<T> {
-    const set: Set<T> = new Set
-    for (const [ source, dists ] of this.relationmap) {
+    const set = new Set<T>()
+    for (const [ source, targets ] of this.__relations) {
       set.add(source)
-      for (const dist of dists) {
+      for (const dist of targets) {
         set.add(dist)
       }
     }
     return set
   }
 
-  private get copy(): Relationship<T> {
-    return new Relationship(this.dataset)
-  }
-
-  /**
-   * Same as `(getter)nodes`, but removes the node passed as a parameter.
-   * @param node Nodes that will not be included in the array.
-   */
-  getNodes(node: T): T[] {
-    return Relationship.drop(this.nodes, node)
-  }
-
-  /**
-   * Same as `(getter)nodeset`, but removes the node passed as a parameter.
-   * @param node Nodes that will not be included in the Set instance.
-   */
-  getNodeset(node: T): Set<T> {
-    const set: Set<T> = this.nodeset
-    set.delete(node)
-    return set
-  }
-
-  /**
-   * Alias to `getNodes`
-   * @param node Nodes that will not be included in the array.
-   */
-  getAmbientNodes(node: T): T[] {
-    return this.getNodes(node)
-  }
-
-  /**
-   * Alias to `getNodeset`
-   * @param node Nodes that will not be included in the Set instance.
-   */
-  getAmbientNodeset(node: T): T[] {
-    return this.getNodes(node)
+  protected get copy(): this {
+    return new (this.constructor as any)(this.dataset)
   }
 
   /**
    * 해당 노드와 관련있는 릴레이션을 반환합니다. 릴레이션이 없다면 생성하고 반환합니다.
    * @param source 해당 노드입니다.
    */
-  private ensureRelation(source: T, ...dists: T[]): Relation<T> {
-    if (!this.relationmap.has(source)) {
-      this.relationmap.set(source, [])
+  protected ensureRelation(source: T, ...targets: T[]): Relation<T> {
+    if (!this.__relations.has(source)) {
+      this.__relations.set(source, [])
     }
-    const relation: Relation<T> = this.relationmap.get(source)!
-    for (const dist of dists) {
+    const relation = this.__relations.get(source)!
+    for (const dist of targets) {
       Relationship.add(relation, dist)
     }
     return relation
@@ -142,10 +108,10 @@ export class Relationship<T> {
    * Creates a new refer between nodes, and returns it as a Relationship instance.
    * This is one-sided relationship between both nodes.
    * @param source    The source node.
-   * @param dists     The target nodes.
+   * @param targets     The target nodes.
    */
-  setReferTo(source: T, ...dists: T[]): Relationship<T> {
-    this.ensureRelation(source, ...dists)
+  to(source: T, ...targets: T[]): this {
+    this.ensureRelation(source, ...targets)
     return this
   }
 
@@ -155,7 +121,7 @@ export class Relationship<T> {
    * @param a     Node A to refer to node B.
    * @param b     Node B to refer to node A.
    */
-  setReferBoth(a: T, ...b: T[]): Relationship<T> {
+  both(a: T, ...b: T[]): this {
     this.ensureRelation(a, ...b)
     for (const dist of b) {
       this.ensureRelation(dist, a)
@@ -168,9 +134,9 @@ export class Relationship<T> {
    * All nodes will know each others.
    * @param nodes Nodes to relate to each other.
    */
-  setReferAll(...nodes: T[]): Relationship<T> {
+  all(...nodes: T[]): this {
     for (const node of nodes) {
-      const relation: Relation<T> = this.ensureRelation(node, ...nodes)
+      const relation = this.ensureRelation(node, ...nodes)
       Relationship.drop(relation, node)
     }
     return this
@@ -182,23 +148,23 @@ export class Relationship<T> {
    * @param a 병합할 릴레이션데이터 배열입니다.
    * @param b 병합할 릴레이션데이터 배열입니다.
    */
-  private getCombinedDataset(a: RelationData<T>[], b: RelationData<T>[]): RelationData<T>[] {
-    const map: Map<T, Relation<T>> = new Map
-    const mapA: Map<T, Relation<T>> = new Map(a)
-    const mapB: Map<T, Relation<T>> = new Map(b)
+  protected getCombinedDataset(a: RelationData<T>[], b: RelationData<T>[]): RelationData<T>[] {
+    const map = new Map<T, Relation<T>>()
+    const mapA = new Map<T, Relation<T>>(a)
+    const mapB = new Map<T, Relation<T>>(b)
 
     for (const [ sourceA, relationA ] of mapA) {
       if (!map.has(sourceA)) {
         map.set(sourceA, relationA)
       }
-      const relation: Relation<T> = map.get(sourceA)!
+      const relation = map.get(sourceA)!
       Relationship.add(relation, ...relationA)
     }
     for (const [ sourceB, relationB ] of mapB) {
       if (!map.has(sourceB)) {
         map.set(sourceB, relationB)
       }
-      const relation: Relation<T> = map.get(sourceB)!
+      const relation = map.get(sourceB)!
       Relationship.add(relation, ...relationB)
     }
 
@@ -212,19 +178,19 @@ export class Relationship<T> {
    * @param accDataset 탐색된 관계를 누산할 릴레이션데이터 배열입니다.
    * @param tests 탐색된 노드를 담고있는 배열입니다. 이미 한 번 탐색된 노드는 이 배열에 담깁니다. 상호참조하는 관계로 인해 무한히 탐색되는 것을 방지하는 용도로 사용됩니다.
    */
-  private getSearchedRelationDataset(source: T, depth: number, accDataset: RelationData<T>[] = [[source, []]], tests: T[] = []): RelationData<T>[] {
-    const distRelation: Relation<T>         = this.relationmap.has(source) ? this.relationmap.get(source)! : []
+  protected getSearchedRelationDataset(source: T, depth: number, accDataset: RelationData<T>[] = [[source, []]], tests: T[] = []): RelationData<T>[] {
+    const distRelation: Relation<T>         = this.__relations.has(source) ? this.__relations.get(source)! : []
     const srcDataset: RelationData<T>[]     = [[source, distRelation]]
-    if (depth <= 0)                         return srcDataset
-    if (Relationship.has(tests, source))    return srcDataset
+    if (!depth)                             return srcDataset
     if (!distRelation)                      return srcDataset
+    if (Relationship.has(tests, source))    return srcDataset
 
     Relationship.add(tests, source)
 
     depth--
     accDataset = this.getCombinedDataset(accDataset, srcDataset)
     for (const dist of distRelation) {
-      const distDataset: RelationData<T>[] = this.getSearchedRelationDataset(dist, depth, accDataset, tests)
+      const distDataset = this.getSearchedRelationDataset(dist, depth, accDataset, tests)
       accDataset = this.getCombinedDataset(accDataset, distDataset)
     }
     return accDataset
@@ -234,26 +200,46 @@ export class Relationship<T> {
    * Only the nodes that are related to the node received by the parameter are filtered and returned in a new Relationship instance.
    * You can control calculation depth relationship with depth parameter.
    * @param source The source node.
-   * @param depth If depth parameter are negative, it's will be calculte all relationship between nodes in instance. Depth parameter default value is -1.
+   * @param depth If depth parameter are negative, it's will be calculate all relationship between nodes in instance. Depth parameter default value is -1.
+   * @returns new Relationship instance.
    */
-  getRelation(source: T, depth: number = -1): Relationship<T> {
+  from(source: T, depth: number = -1): this {
     if (depth < 0) {
       depth = Number.MAX_SAFE_INTEGER
     }
-    const testR: Relationship<T> = this.copy
-    const relationDataset: RelationData<T>[] = testR.getSearchedRelationDataset(source, --depth)
-    return new Relationship(relationDataset)
+    const clone = this.copy
+    const relationDataset = clone.getSearchedRelationDataset(source, --depth)
+    return new (this.constructor as any)(relationDataset)
+  }
+
+  /**
+   * Returns a new relationship instance with only nodes that meet the conditions.
+   * @param filter condition filter callback function
+   */
+  where(filter: (node: T, i: number, array: T[]) => boolean): this {
+    const clone = this.copy
+    const targets = clone.nodes.filter((v, i, a) => !filter(v, i, a))
+    clone.drop(...targets)
+    return clone
+  }
+
+  /**
+   * Returns the remaining nodes except those received as parameters from the current relationship instance.
+   * @param nodes This is a list of nodes to exclude.
+   */
+  without(...nodes: T[]): T[] {
+    return Relationship.drop(this.nodes, ...nodes)
   }
 
   /**
    * 해당 노드에서 참조하는 노드들 중에서 대상 노드를 제거합니다.
    * @param source 해당 노드입니다.
-   * @param dists 대상 노드입니다.
+   * @param targets 대상 노드입니다.
    */
-  private unlinkRefersFromSource(source: T, ...dists: T[]): void {
-    const relation: Relation<T>|undefined = this.relationmap.get(source)
+  protected unlinkRefersFromSource(source: T, ...targets: T[]): void {
+    const relation = this.__relations.get(source)
     if (relation) {
-      Relationship.drop(relation, ...dists)
+      Relationship.drop(relation, ...targets)
     }
   }
 
@@ -261,20 +247,20 @@ export class Relationship<T> {
    * Deletes the relationship between nodes and returns it as a Relationship instance.
    * This is one-sided cut off between both nodes.
    * @param source The source node.
-   * @param dists The target nodes.
+   * @param targets The target nodes.
    */
-  unlinkTo(source: T, ...dists: T[]): Relationship<T> {
-    this.unlinkRefersFromSource(source, ...dists)
+  unlinkTo(source: T, ...targets: T[]): this {
+    this.unlinkRefersFromSource(source, ...targets)
     return this
   }
 
   /**
    * Deletes the relationship between nodes and returns it as a Relationship instance.
    * Both nodes will cut off each other.
-   * @param a Node A to unink from node B.
-   * @param b Node B to unink from node A.
+   * @param a Node A to unlink from node B.
+   * @param b Node B to unlink from node A.
    */
-  unlinkBoth(a: T, ...b: T[]): Relationship<T> {
+  unlinkBoth(a: T, ...b: T[]): this {
     this.unlinkRefersFromSource(a, ...b)
     for (const dist of b) {
       this.unlinkRefersFromSource(dist, a)
@@ -287,12 +273,12 @@ export class Relationship<T> {
    * Returns the result with a Relationship instance.
    * @param nodes Nodes to be deleted.
    */
-  dropNode(...nodes: T[]): Relationship<T> {
-    for (const relation of this.relationmap.values()) {
+  drop(...nodes: T[]): this {
+    for (const relation of this.__relations.values()) {
       Relationship.drop(relation, ...nodes)
     }
     for (const node of nodes) {
-      this.relationmap.delete(node)
+      this.__relations.delete(node)
     }
     return this
   }
@@ -301,18 +287,32 @@ export class Relationship<T> {
    * Returns whether the instance contains that node.
    * @param node Node to find.
    */
-  hasNode(node: T): boolean {
-    let isExists: boolean = this.relationmap.has(node)
-    for (const relation of this.relationmap.values()) {
+  has(node: T): boolean {
+    let isExists = this.__relations.has(node)
+    for (const relation of this.__relations.values()) {
       if (Relationship.has(relation, node)) {
         isExists = true
+        break
       }
     }
     return isExists
   }
 
+  /**
+   * Returns whether the instance contains all of its nodes.
+   * @param nodes A list of nodes to search for.
+   */
+  hasAll(...nodes: T[]): boolean {
+    for (const node of nodes) {
+      if (!this.has(node)) {
+        return false
+      }
+    }
+    return true
+  }
+
   /** Destroy the data in the instance. It is used for garbage collector. */
   clear(): void {
-    this.relationmap.clear()
+    this.__relations.clear()
   }
 }

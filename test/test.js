@@ -1,11 +1,11 @@
-var { Relationship } = require('../dist/raw')
+var { Relationship } = require('../dist/umd/raw')
 
 class Human {
     constructor(name) {
         this.name = name
     }
     sayHello() {
-        console.log(`Hello, my name is ${this.name}`)
+        console.log(`${this.name}: Hello, my name is ${this.name}`)
     }
 }
 
@@ -25,18 +25,18 @@ const manager   = new Human('harris')
 // Create relationship
 let state = new Relationship
 
-state = state.setReferTo(manager, john, jacob)
+state = state.to(manager, john, jacob)
 
-            state.setReferAll(john, paul, lawrence)
-            state.setReferAll(jacob, richard, collin)
+state.all(john, paul, lawrence)
+state.all(jacob, richard, collin)
 
-console.log(state.getRelation(manager, 1).getNodes(manager))
+console.log(state.from(manager, 1).without(manager))
 console.log('manager: Here are the leaders of my team.')
 
-state.getRelation(manager, 1).getNodes(manager).forEach((leader) => {
+state.from(manager, 1).without(manager).forEach((leader) => {
     leader.sayHello()
     console.log(`${leader.name}: And... these are my teammates.`)
-    state.getRelation(leader).getNodes(leader).forEach((member) => {
+    state.from(leader).without(leader).forEach((member) => {
         member.sayHello()
     })
 })
