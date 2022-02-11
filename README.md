@@ -179,7 +179,6 @@ Returns the remaining nodes except those received as parameters from the current
 
 ```javascript
 A.from('language').without('language') // English, Korean, Japanese
-A.without('language').from('language') // Empty
 ```
 
 #### unlinkTo(source: `RelationNode`, ...targets: `RelationNode[]`): `Relationship`
@@ -235,10 +234,10 @@ const state = new Relationship()
             .to('language', 'English', 'Korean', 'Japanese')
             .both('English', 'US', 'France', 'Italy')
 
-console.log(`Languages: ${ state.from('language').without('language').nodes }`)
+console.log(`Languages: ${ state.from('language').without('language') }`)
 // Languages: English, Korean, Japanese, US, France, Italy
 
-console.log(`English country: ${ state.from('English').drop('language').without('English').nodes }`)
+console.log(`English country: ${ state.from('English').drop('language').without('English') }`)
 // English country: US, France, Italy 
 ```
 
@@ -267,7 +266,7 @@ let state: Relationship<ServerName|User> = new Relationship
 state = state.to('server-a', userA, userB)
 state = state.to('server-b', userC)
 
-console.log( state.from('server-b').without('server-b').nodes ) // userC
+console.log( state.from('server-b').without('server-b') ) // userC
 ```
 
 ```javascript
@@ -304,10 +303,10 @@ state = state.to(manager, john, jacob)
              .all(jacob, richard, collin)
 
 console.log(`${manager.name}: Here are the leaders of my team.`)
-state.from(manager, 1).without(manager).nodes.forEach((leader: Human) => {
+state.from(manager, 1).without(manager).forEach((leader: Human) => {
     leader.sayHello()
     console.log(`${leader.name}: And... these are my teammates.`)
-    state.from(leader).without(leader).nodes.forEach((member: Human) => {
+    state.from(leader).without(leader).forEach((member: Human) => {
         member.sayHello()
     })
 })
