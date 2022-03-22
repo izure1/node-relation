@@ -21,8 +21,8 @@ const esnext = {
     outputModule: true
   },
   entry: {
-    'esm/index': path.join(__dirname, 'src', 'index.ts'),
-    'esm/raw/index': path.join(__dirname, 'src', 'raw', 'index.ts')
+    'esm/index': path.join(__dirname, 'src', 'esm', 'index.ts'),
+    'esm/raw/index': path.join(__dirname, 'src', 'esm', 'raw', 'index.ts')
   },
   output: {
     path: path.join(__dirname, 'dist'),
@@ -36,8 +36,8 @@ const esnext = {
 const umd = {
   ...base,
   entry: {
-    'umd/index': path.join(__dirname, 'src', 'index.ts'),
-    'umd/raw/index': path.join(__dirname, 'src', 'raw', 'index.ts')
+    'umd/index': path.join(__dirname, 'src', 'umd', 'index.ts'),
+    'umd/raw/index': path.join(__dirname, 'src', 'umd', 'raw', 'index.ts')
   },
   output: {
     path: path.join(__dirname, 'dist'),

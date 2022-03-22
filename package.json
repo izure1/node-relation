@@ -1,21 +1,19 @@
 {
   "name": "node-relation",
-  "version": "4.0.2-alpha.0",
+  "version": "4.0.2-alpha.1",
   "description": "Manage strings, number, object that are related to each other.",
   "main": "dist/umd/index.js",
   "module": "dist/esm/index.js",
-  "types": "types/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack"
   },
   "files": [
-    "dist/**/*.js",
-    "types/**/*.d.ts"
+    "dist/**/*.js"
   ],
   "author": "izure <admin@izure.org>",
   "homepage": "https://github.com/izure1/node-relation",
-  "keywords": ["relationship", "manage", "group", "node", "linked list"],
+  "keywords": ["relationship", "relation", "map", "manage", "group", "node", "linked list", "linked-list"],
   "license": "MIT",
   "devDependencies": {
     "webpack": "^5.68.0",
