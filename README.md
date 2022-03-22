@@ -157,7 +157,7 @@ harris <─> richard
 richard <─> john
 ```
 
-#### from(source: `RelationNode[]`, depth?: `number` = -1): `Relationship`
+#### from(source: `RelationNode`, depth?: `number` = -1): `Relationship`
 
 Only the nodes that are related to the node received by the parameter are filtered and returned in a new Relationship instance.
 You can control calculation depth relationship with depth parameter. If depth parameter are negative, it's will be calculate all relationship between nodes in instance. Depth parameter default value is -1.

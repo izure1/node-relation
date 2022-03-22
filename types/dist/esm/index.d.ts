@@ -1,7 +1,7 @@
-import { Relationship as RawRelationship, RelationData } from './raw/Relation'
+import { Relationship as RawRelationship, RelationData } from './raw/index'
 
-export declare class Relationship<T> extends RawRelationship<T> {
-  constructor(data: RelationData<T>[])
+export class Relationship<T> extends RawRelationship<T> {
+  constructor(data?: RelationData<T>[])
 
   /**
    * Creates a new refer between nodes, and returns it as a Relationship instance.

@@ -1,10 +1,10 @@
-export declare type Relation<T> = T[]
-export declare type RelationData<T> = [T, Relation<T>]
+export type Relation<T> = T[]
+export type RelationData<T> = [T, Relation<T>]
 
 export class Relationship<T> {
   protected readonly __relations: Map<T, Relation<T>>
 
-  constructor(data: RelationData<T>[])
+  constructor(data?: RelationData<T>[])
 
   /**
    * 배열이 노드를 가지고 있는지 여부를 반환합니다.

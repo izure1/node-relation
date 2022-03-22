@@ -1,1 +1,1 @@
-export { Relationship } from './Relation'
+export * from './dist/esm/index'
