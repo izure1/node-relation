@@ -213,14 +213,20 @@ export class Relationship<T> {
   }
 
   /**
-   * Returns a new relationship instance with only nodes that meet the conditions.
+   * Returns a new relationship instance with only nodes that meet the conditions or the relational node.  
+   * This is similar to the `from` method, but it is useful when you want to use more detailed conditions.
    * @param filter condition filter callback function
    */
   where(filter: (node: T, i: number, array: T[]) => boolean): this {
-    const clone = this.copy
-    const targets = clone.nodes.filter((v, i, a) => !filter(v, i, a))
-    Relationship.prototype.drop.call(clone, ...targets)
-    return clone
+    let accData: RelationData<T>[] = []
+
+    const correctNodes = this.nodes.filter(filter)
+    correctNodes.forEach((node) => {
+      const append = this.getSearchedRelationDataset(node, -1)
+      accData = this.getCombinedDataset(accData, append)
+    })
+
+    return new (this.constructor as any)(accData) as this
   }
 
   /**
