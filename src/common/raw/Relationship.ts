@@ -317,6 +317,16 @@ export class Relationship<T> {
     return true
   }
 
+  weight(node: T): number {
+    let weight = 0
+    for (const [key, relation] of this.__relations) {
+      if (key === node || relation.includes(node)) {
+        weight++
+      }
+    }
+    return weight
+  }
+
   /** Destroy the data in the instance. It is used for garbage collector. */
   clear(): void {
     this.__relations.clear()
