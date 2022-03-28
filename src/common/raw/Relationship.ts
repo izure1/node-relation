@@ -330,7 +330,7 @@ export class Relationship<T> {
       }
     }
     if (log) {
-      weight = Math.log(weight)
+      weight = Math.log(weight + 1)
     }
     return weight
   }
@@ -338,11 +338,19 @@ export class Relationship<T> {
   /**
    * Returns the weight of all nodes. Check the `weight` method.
    * @param log If this parameter is set to true, it returns the value to which the log function is applied. This is useful when the value is too high.
+   * @param normalize Normalize the weight value. Convert all values to values from 0 to 1.
    */
-  weights(log = false): Map<T, number> {
+  weights(log = false, normalize = false): Map<T, number> {
     const weights = new Map<T, number>()
     for (const node of this.nodes) {
       weights.set(node, this.weight(node, log))
+    }
+    if (normalize) {
+      const map = Array.from(weights)
+      const max = Math.max(...map.flatMap(([_node, weight]) => weight))
+      for (const [node, weight] of map) {
+        weights.set(node, weight / max)
+      }
     }
     return weights
   }
