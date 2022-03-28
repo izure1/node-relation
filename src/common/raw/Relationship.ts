@@ -295,8 +295,8 @@ export class Relationship<T> {
    */
   has(node: T): boolean {
     let isExists = this.__relations.has(node)
-    for (const relation of this.__relations.values()) {
-      if (Relationship.has(relation, node)) {
+    for (const [key, relation] of this.__relations) {
+      if (key === node || Relationship.has(relation, node)) {
         isExists = true
         break
       }
