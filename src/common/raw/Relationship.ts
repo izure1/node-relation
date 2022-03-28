@@ -317,14 +317,34 @@ export class Relationship<T> {
     return true
   }
 
-  weight(node: T): number {
+  /**
+   * Returns how many nodes are related to the node received by the parameter.
+   * @param node Node to find.
+   * @param log If this parameter is set to true, it returns the value to which the log function is applied. This is useful when the value is too high.
+   */
+  weight(node: T, log = false): number {
     let weight = 0
-    for (const [key, relation] of this.__relations) {
-      if (key === node || relation.includes(node)) {
+    for (const relation of this.__relations.values()) {
+      if (Relationship.has(relation, node)) {
         weight++
       }
     }
+    if (log) {
+      weight = Math.log(weight)
+    }
     return weight
+  }
+
+  /**
+   * Returns the weight of all nodes. Check the `weight` method.
+   * @param log If this parameter is set to true, it returns the value to which the log function is applied. This is useful when the value is too high.
+   */
+  weights(log = false): Map<T, number> {
+    const weights = new Map<T, number>()
+    for (const node of this.nodes) {
+      weights.set(node, this.weight(node, log))
+    }
+    return weights
   }
 
   /** Destroy the data in the instance. It is used for garbage collector. */
