@@ -56,7 +56,7 @@ const A = new Relationship().to('a', 'b', 'c')
 
 ### Migration 3.x.x to 4.x.x
 
-Check [readme](./Migration_3_to_4.md)
+Check [readme](https://github.com/izure1/node-relation/blob/master/Migration_3_to_4.md)
 
 ### Methods
 
@@ -209,7 +209,7 @@ Delete the node. If the node associated with the deleted node is isolated, it is
 B.drop('language').nodes // English, US, France, Italy
 ```
 
-#### has(node: `RelationNode`): `Boolean`
+#### has(node: `RelationNode`): `boolean`
 
 Returns whether the instance contains that node.
 
@@ -217,12 +217,28 @@ Returns whether the instance contains that node.
 const hasKorean = B.has('korean') // true
 ```
 
-#### hasAll(...nodes: `RelationNode[]`): `Boolean`
+#### hasAll(...nodes: `RelationNode[]`): `boolean`
 
 Returns whether the instance contains all of its nodes.
 
 ```javascript
 const hasAll = B.hasAll('Japanese', 'Korean') // true
+```
+
+#### weight(node: `RelationNode`, log?: `boolean` = `false`): `number`
+
+Returns how many nodes are related to the node received by the parameter.
+
+```javascript
+const weight = B.weight('language')
+```
+
+#### weights(log?: `boolean` = `false`, normalize?: `boolean` = `false`): `Map<RelationNode, number>`
+
+Returns the weight of all nodes. Check the `weight` method.
+
+```javascript
+const weights = B.weights()
 ```
 
 #### clear(): `void`

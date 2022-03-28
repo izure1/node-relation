@@ -26,6 +26,10 @@ Added new methods.
 
 ### `hasAll`
 
+### `weight` (>=4.1.0)
+
+### `weights` (>=4.1.0)
+
 Some method names have been changed.
 
 ### `setReferTo` => `to`
