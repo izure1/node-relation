@@ -100,6 +100,30 @@ const state = new Relation().to('a', 'b').to('b', 'c')
 state.nodeset // Set<['a', 'b', 'c']>
 ```
 
+#### `(getter)` oneHotVector: `Map<RelationNode, number[]>`
+
+Get all nodes as one-hot vectors from the instance. It could be used as dataset for machine learning.
+
+```javascript
+const state = new Relation().to('a', 'b').to('b', 'c')
+const vectors = state.oneHotVector
+
+vectors // Map<[['a', [1, 0, 0]], ['b', [0, 1, 0]], ['c', [0, 0, 1]]]>
+Array.from(vectors.values()) // [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+```
+
+#### `(getter)` label: `Map<RelationNode, number>`
+
+Get all nodes as labeled vector from the instance. It could be used as dataset for machine learning.
+
+```javascript
+const state = new Relation().to('a', 'b').to('b', 'c')
+const vector = state.label
+
+vector // Map<[['a', 0], ['b', 1], ['c', 2]]>
+Array.from(vector.values()) // [0, 1, 2]
+```
+
 #### to(source: `RelationNode`, ...targets: `RelationNode[]`): `Relationship`
 
 Creates a new refer between nodes, and returns it as a Relationship instance.

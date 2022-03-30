@@ -85,6 +85,38 @@ export class Relationship<T> {
     return set
   }
 
+  /**
+   * Get all nodes as one-hot vectors from the instance. It could be used as dataset for machine learning.
+   * @example
+   * const vectorA = state.oneHotVector.get('A')
+   * const vectors = Array.from(state.oneHotVector.values())
+   */
+  get oneHotVector(): Map<T, number[]> {
+    const vectors = new Map<T, number[]>()
+    const nodes = this.nodes
+    nodes.forEach((node, i) => {
+      const vector = new Array<number>(nodes.length).fill(0)
+      vector[i] = 1
+      vectors.set(node, vector)
+    })
+    return vectors
+  }
+
+  /**
+   * Get all nodes as labeled vector from the instance. It could be used as dataset for machine learning.
+   * @example
+   * const labelA = state.label.get('A')
+   * const labels = Array.from(state.label.values())
+   */
+  get label(): Map<T, number> {
+    const labels = new Map<T, number>()
+    const nodes = this.nodes
+    nodes.forEach((node, i) => {
+      labels.set(node, i)
+    })
+    return labels
+  }
+
   protected get copy(): this {
     return new (this.constructor as any)(this.dataset)
   }
