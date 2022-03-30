@@ -100,13 +100,13 @@ const state = new Relation().to('a', 'b').to('b', 'c')
 state.nodeset // Set<['a', 'b', 'c']>
 ```
 
-#### `(getter)` oneHotVector: `Map<RelationNode, number[]>`
+#### `(getter)` oneHot: `Map<RelationNode, number[]>`
 
 Get all nodes as one-hot vectors from the instance. It could be used as dataset for machine learning.
 
 ```javascript
 const state = new Relation().to('a', 'b').to('b', 'c')
-const vectors = state.oneHotVector
+const vectors = state.oneHot
 
 vectors // Map<[['a', [1, 0, 0]], ['b', [0, 1, 0]], ['c', [0, 0, 1]]]>
 Array.from(vectors.values()) // [[1, 0, 0], [0, 1, 0], [0, 0, 1]]

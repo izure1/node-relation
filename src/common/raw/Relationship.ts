@@ -88,10 +88,10 @@ export class Relationship<T> {
   /**
    * Get all nodes as one-hot vectors from the instance. It could be used as dataset for machine learning.
    * @example
-   * const vectorA = state.oneHotVector.get('A')
-   * const vectors = Array.from(state.oneHotVector.values())
+   * const vectorA = state.oneHot.get('A')
+   * const vectors = Array.from(state.oneHot.values())
    */
-  get oneHotVector(): Map<T, number[]> {
+  get oneHot(): Map<T, number[]> {
     const vectors = new Map<T, number[]>()
     const nodes = this.nodes
     nodes.forEach((node, i) => {

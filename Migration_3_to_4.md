@@ -30,7 +30,7 @@ Added new methods.
 
 ### `weights` (>=4.1.0)
 
-### (getter)`oneHotVector` (>=4.2.0)
+### (getter)`oneHot` (>=4.2.0)
 
 ### (getter)`label` (>=4.2.0)
 
