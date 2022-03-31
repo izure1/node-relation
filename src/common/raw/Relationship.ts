@@ -236,9 +236,6 @@ export class Relationship<T> {
    * @returns new Relationship instance.
    */
   from(source: T, depth: number = -1): this {
-    if (depth < 0) {
-      depth = Number.MAX_SAFE_INTEGER
-    }
     const clone = this.copy
     const relationDataset = clone.getSearchedRelationDataset(source, --depth)
     return new (this.constructor as any)(relationDataset)
