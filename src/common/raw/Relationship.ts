@@ -374,12 +374,16 @@ export class Relationship<T> {
    */
   weights(log = false, normalize = false): Map<T, number> {
     const weights = new Map<T, number>()
+    let max = 0
     for (const node of this.nodes) {
-      weights.set(node, this.weight(node, log))
+      const weight = this.weight(node, log)
+      if (weight > max) {
+        max = weight
+      }
+      weights.set(node, weight)
     }
     if (normalize) {
       const map = Array.from(weights)
-      const max = Math.max(...map.flatMap(([_node, weight]) => weight))
       for (const [node, weight] of map) {
         weights.set(node, weight / max)
       }
