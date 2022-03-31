@@ -66,7 +66,7 @@ export class Relationship<T> {
   /** Get all nodes from the instance. */
   get nodes(): T[] {
     const nodes: T[] = []
-    for (const [ source, targets ] of this.__relations) {
+    for (const [source, targets] of this.__relations) {
       Relationship.add(nodes, source)
       Relationship.add(nodes, ...targets)
     }
@@ -76,7 +76,7 @@ export class Relationship<T> {
   /** Get all nodes as Set object from the instance. */
   get nodeset(): Set<T> {
     const set = new Set<T>()
-    for (const [ source, targets ] of this.__relations) {
+    for (const [source, targets] of this.__relations) {
       set.add(source)
       for (const dist of targets) {
         set.add(dist)
@@ -185,14 +185,14 @@ export class Relationship<T> {
     const mapA = new Map<T, Relation<T>>(a)
     const mapB = new Map<T, Relation<T>>(b)
 
-    for (const [ sourceA, relationA ] of mapA) {
+    for (const [sourceA, relationA] of mapA) {
       if (!map.has(sourceA)) {
         map.set(sourceA, relationA)
       }
       const relation = map.get(sourceA)!
       Relationship.add(relation, ...relationA)
     }
-    for (const [ sourceB, relationB ] of mapB) {
+    for (const [sourceB, relationB] of mapB) {
       if (!map.has(sourceB)) {
         map.set(sourceB, relationB)
       }
