@@ -128,6 +128,11 @@ export class Relationship<T> {
     return labels
   }
 
+  /** Returns a new instance of this. clone instance are copy dataset from this, but It's not deep-copied object. */
+  get clone(): this {
+    return this.copy
+  }
+
   protected get copy(): this {
     return new (this.constructor as any)(this.dataset)
   }
