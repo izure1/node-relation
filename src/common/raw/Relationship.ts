@@ -128,7 +128,10 @@ export class Relationship<T> {
     return labels
   }
 
-  /** Returns a new instance of this. clone instance are copy dataset from this, but It's not deep-copied object. */
+  /**
+   * Returns a new instance of this.
+   * The clone instance are copy dataset from this, but It's not deep-copied object.
+   */
   get clone(): this {
     return this.copy
   }
@@ -157,6 +160,10 @@ export class Relationship<T> {
    * This is one-sided relationship between both nodes.
    * @param source    The source node.
    * @param targets     The target nodes.
+   * @example
+   * // user-a -> user-b
+   * // user-a -> user-c
+   * state.to('user-a', 'user-b', 'user-c')
    */
   to(source: T, ...targets: T[]): this {
     this.ensureRelation(source, ...targets)
@@ -168,6 +175,10 @@ export class Relationship<T> {
    * Both nodes will know each other.
    * @param a     Node A to refer to node B.
    * @param b     Node B to refer to node A.
+   * @example
+   * // user-a <-> user-b
+   * // user-a <-> user-c
+   * state.both('user-a', 'user-b', 'user-c')
    */
   both(a: T, ...b: T[]): this {
     this.ensureRelation(a, ...b)
@@ -181,6 +192,11 @@ export class Relationship<T> {
    * Creates a new relationship between all each other nodes, and returns it as a Relationship instance.
    * All nodes will know each others.
    * @param nodes Nodes to relate to each other.
+   * @example
+   * // user-a <-> user-b
+   * // user-b <-> user-c
+   * // user-c <-> user-a
+   * state.all('user-a', 'user-b', 'user-c')
    */
   all(...nodes: T[]): this {
     for (const node of nodes) {
@@ -250,6 +266,10 @@ export class Relationship<T> {
    * @param source The source node.
    * @param depth If depth parameter are negative, it's will be calculate all relationship between nodes in instance. Depth parameter default value is -1.
    * @returns new Relationship instance.
+   * @example
+   * const A = state.to('user-a', 'user-b').to('user-b', 'user-c') // user-a -> user-b -> user-c
+   * A.from('user-a') // 'user-a', 'user-b', 'user-c'
+   * A.from('user-a', 1) // 'user-a', 'user-b'
    */
   from(source: T, depth: number = -1): this {
     const clone = this.copy
@@ -261,6 +281,11 @@ export class Relationship<T> {
    * Returns a new relationship instance with only nodes that meet the conditions or the relational node.  
    * This is similar to the `from` method, but it is useful when you want to use more detailed conditions.
    * @param filter condition filter callback function
+   * @example
+   * // user-a -> user-b
+   * // user-c -> user-d
+   * const A = state.to('user-a', 'user-b').to('user-c', 'user-d')
+   * A.where((node) => node.includes('a')) // user-a, user-b
    */
   where(filter: (node: T, i: number, array: T[]) => boolean): this {
     let accData: RelationData<T>[] = []
@@ -277,6 +302,11 @@ export class Relationship<T> {
   /**
    * Returns the remaining nodes except those received as parameters from the current relationship instance.
    * @param nodes This is a list of nodes to exclude.
+   * @example
+   * const A = state.all('user-a', 'user-b', 'user-c')
+   * const B = A.from('user-a')
+   * B.nodes // user-a, user-b, user-c
+   * B.without('user-a') // user-b, user-c
    */
   without(...nodes: T[]): T[] {
     return Relationship.drop(this.nodes, ...nodes)
@@ -299,6 +329,7 @@ export class Relationship<T> {
    * This is one-sided cut off between both nodes.
    * @param source The source node.
    * @param targets The target nodes.
+   * @example
    */
   unlinkTo(source: T, ...targets: T[]): this {
     this.unlinkRefersFromSource(source, ...targets)
@@ -337,6 +368,9 @@ export class Relationship<T> {
   /**
    * Returns whether the instance contains that node.
    * @param node Node to find.
+   * @example
+   * const A = state.to('user-a', 'user-b')
+   * state.has('user-a') // true
    */
   has(node: T): boolean {
     let isExists = this.__relations.has(node)
@@ -352,6 +386,9 @@ export class Relationship<T> {
   /**
    * Returns whether the instance contains all of its nodes.
    * @param nodes A list of nodes to search for.
+   * @example
+   * const A = state.to('user-a', 'user-b', 'user-c')
+   * state.hasAll('user-a', 'user-f') // false
    */
   hasAll(...nodes: T[]): boolean {
     for (const node of nodes) {
