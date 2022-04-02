@@ -112,6 +112,17 @@ vectors // Map<[['a', [1, 0, 0]], ['b', [0, 1, 0]], ['c', [0, 0, 1]]]>
 Array.from(vectors.values()) // [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
 ```
 
+### `(getter)` zeroVector: `number[]`
+
+Get a 1-dimensional vector that was filled 0. The vector's size are same as nodes length of instance. This is useful for representing data that does not belong to anything. It could be used as dataset for machine learning.
+
+```javascript
+const state = new Relation().to('a', 'b').to('b', 'c')
+const vectors = state.oneHot
+const zeroVector = state.zeroHot
+const allVectors = [zeroVector, ...vectors]
+```
+
 #### `(getter)` label: `Map<RelationNode, number>`
 
 Get all nodes as labeled vector from the instance. It could be used as dataset for machine learning.

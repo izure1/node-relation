@@ -109,7 +109,7 @@ export class Relationship<T> {
    * const vectors = Array.from(state.oneHot.values())
    * const allVectors = [voidVector, ...vectors]
    */
-  get zeroHot(): number[] {
+  get zeroVector(): number[] {
     return new Array(this.nodes.length).fill(0)
   }
 

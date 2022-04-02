@@ -34,6 +34,8 @@ Added new methods.
 
 ### (getter)`label` (>=4.2.0)
 
+### (getter)`zeroVector` (>=4.2.1)
+
 Some method names have been changed.
 
 ### `setReferTo` => `to`
