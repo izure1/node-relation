@@ -483,23 +483,40 @@ export class Relationship<T> {
   }
 
   /**
-   * Returns the found minimum distance to between source to target.
+   * Returns the found minimum depth to between source to target.
    * If cannot find the way on source to target, Returns `Infinity`
    * @param source Node to start
    * @param target Node to target
    * @param log If this parameter is set to true, it returns the value to which the log function is applied. This is useful when the value is too high.
    * @example
    * const A = state.to('user-a', 'user-b').to('user-b', 'user-c')
-   * A.distance('user-a', 'user-b') // 1
-   * A.distance('user-a', 'user-c') // 2
-   * A.distance('user-c', 'user-a') // Infinity
+   * A.depth('user-a', 'user-b') // 1
+   * A.depth('user-a', 'user-c') // 2
+   * A.depth('user-c', 'user-a') // Infinity
    */
-  distance(source: T, target: T, log = false): number {
+  depth(source: T, target: T, log = false): number {
     let depth = this.getSearchedDepth(source, target)
     if (log) {
       depth = Math.log(depth + 1)
     }
     return depth
+  }
+
+  /**
+   * Returns the found minimum distance to between a to b.
+   * If cannot find the way on both node, Returns `Infinity`
+   * This is same as `Math.min(this.depth(a, b), this.depth(b, a))`
+   * @param a Node to find a.
+   * @param b Node to find b.
+   * @param log If this parameter is set to true, it returns the value to which the log function is applied. This is useful when the value is too high.
+   * @example
+   * const A = state.to('user-a', 'user-b').to('user-b', 'user-c')
+   * A.distance('user-a', 'user-b') // 1
+   * A.distance('user-a', 'user-c') // 2
+   * A.distance('user-c', 'user-a') // 2
+   */
+  distance(a: T, b: T, log = false): number {
+    return Math.min(this.depth(a, b, log), this.depth(b, a, log))
   }
 
   /** Destroy the data in the instance. It is used for garbage collector. */

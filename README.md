@@ -276,12 +276,21 @@ Returns the weight of all nodes. Check the `weight` method.
 const weights = B.weights()
 ```
 
-#### distance(source: `RelationNode`, target: `RelationNode`, log?: `boolean` = `false`): `number`
+#### depth(source: `RelationNode`, target: `RelationNode`, log?: `boolean` = `false`): `number`
 
-Returns the found minimum distance to between source to target.
+Returns the found minimum depth to between source to target.
 
 ```javascript
-const distance = B.distance('language', 'Korean') // 2
+B.depth('language', 'Korean') // 1
+B.depth('Korean', 'language') // Infinity
+```
+
+#### distance(a: `RelationNode`, b: `RelationNode`, log?: `boolean` = `false`): `number`
+
+Returns the found minimum distance to between both nodes. This is same as `Math.min(this.depth(a, b), this.depth(b, a))`
+
+```javascript
+B.distance('Korean', 'language') // 1
 ```
 
 #### clear(): `void`

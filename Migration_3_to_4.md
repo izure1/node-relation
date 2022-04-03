@@ -36,7 +36,9 @@ Added new methods.
 
 ### (getter)`zeroVector` (>=4.2.1)
 
-### `distance` (>=4.3.0)
+### `depth` (>=4.3.0)
+
+### `distance` (>=4.3.1)
 
 Some method names have been changed.
 
