@@ -58,6 +58,10 @@ export class Relationship<T> {
   /**
    * Returns as 2-dimensional array of relationships between nodes in the instance.
    * Relationships are returned to saveable data-type(json).
+   * @example
+   * const saveData = JSON.stringify(state.dataset)
+   * fs.writeFile('your-file.json', saveData) // in node.js
+   * window.localStorage.set('your-file', saveData) // in browser
    */
   get dataset(): RelationData<T>[] {
     return Array.from(this.__relations)
@@ -351,6 +355,7 @@ export class Relationship<T> {
   /**
    * Deletes the relationship between nodes and returns it as a Relationship instance.
    * This is one-sided cut off between both nodes.
+   * Check the `to` method.
    * @param source The source node.
    * @param targets The target nodes.
    * @example
@@ -363,6 +368,7 @@ export class Relationship<T> {
   /**
    * Deletes the relationship between nodes and returns it as a Relationship instance.
    * Both nodes will cut off each other.
+   * Check the `both` method.
    * @param a Node A to unlink from node B.
    * @param b Node B to unlink from node A.
    */
@@ -378,6 +384,12 @@ export class Relationship<T> {
    * Delete the node. If the node associated with the deleted node is isolated, it is deleted together.
    * Returns the result with a Relationship instance.
    * @param nodes Nodes to be deleted.
+   * @example
+   * // user-a -> user-b
+   * // user-a -> user-c
+   * const A = state.to('user-a', 'user-b').to('user-a', 'user-c')
+   * const B = A.drop('user-a')
+   * B.nodes // empty
    */
   drop(...nodes: T[]): this {
     for (const relation of this.__relations.values()) {
@@ -427,6 +439,11 @@ export class Relationship<T> {
    * Returns how many nodes are related to the node received by the parameter.
    * @param node Node to find.
    * @param log If this parameter is set to true, it returns the value to which the log function is applied. This is useful when the value is too high.
+   * @example
+   * const A = state.to('user-a', 'user-c').both('user-b', 'user-c')
+   * A.weight('user-c') // 2
+   * A.weight('user-a') // 0
+   * A.weight('user-b') // 1
    */
   weight(node: T, log = false): number {
     let weight = 0
@@ -467,12 +484,15 @@ export class Relationship<T> {
 
   /**
    * Returns the found minimum distance to between source to target.
+   * If cannot find the way on source to target, Returns `Infinity`
    * @param source Node to start
    * @param target Node to target
    * @param log If this parameter is set to true, it returns the value to which the log function is applied. This is useful when the value is too high.
    * @example
    * const A = state.to('user-a', 'user-b').to('user-b', 'user-c')
+   * A.distance('user-a', 'user-b') // 1
    * A.distance('user-a', 'user-c') // 2
+   * A.distance('user-c', 'user-a') // Infinity
    */
   distance(source: T, target: T, log = false): number {
     let depth = this.getSearchedDepth(source, target)
