@@ -36,6 +36,8 @@ Added new methods.
 
 ### (getter)`zeroVector` (>=4.2.1)
 
+### `distance` (>=4.3.0)
+
 Some method names have been changed.
 
 ### `setReferTo` => `to`

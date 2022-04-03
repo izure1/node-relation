@@ -269,18 +269,19 @@ export class Relationship<T> {
    */
   protected getSearchedDepth(current: T, target: T, depth = 0, tests: T[] = []): number {
     if (current === target)                 return depth
-    if (Relationship.has(tests, current))   return depth
+    if (Relationship.has(tests, current))   return Infinity
 
     Relationship.add(tests, current)
-
     depth++
-    let min = Infinity
+
+    let newDepth = Infinity
     const distRelation: Relation<T> = this.__relations.has(current) ? this.__relations.get(current)! : []
+
     for (const dist of distRelation) {
       const distDepth = this.getSearchedDepth(dist, target, depth, tests)
-      min = Math.min(min, distDepth)
+      newDepth = Math.min(newDepth, distDepth)
     }
-    return min
+    return newDepth
   }
 
   /**
@@ -476,7 +477,7 @@ export class Relationship<T> {
   distance(source: T, target: T, log = false): number {
     let depth = this.getSearchedDepth(source, target)
     if (log) {
-      depth = Math.log(depth)
+      depth = Math.log(depth + 1)
     }
     return depth
   }

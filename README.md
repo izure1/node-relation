@@ -276,6 +276,14 @@ Returns the weight of all nodes. Check the `weight` method.
 const weights = B.weights()
 ```
 
+#### distance(source: `RelationNode`, target: `RelationNode`, log?: `boolean` = `false`): `number`
+
+Returns the found minimum distance to between source to target.
+
+```javascript
+const distance = B.distance('language', 'Korean') // 2
+```
+
 #### clear(): `void`
 
 Destroy the data in the instance. It is used for garbage collector.
