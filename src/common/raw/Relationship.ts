@@ -67,8 +67,7 @@ export class Relationship<T> {
   get nodes(): T[] {
     const nodes: T[] = []
     for (const [source, targets] of this.__relations) {
-      Relationship.add(nodes, source)
-      Relationship.add(nodes, ...targets)
+      Relationship.add(nodes, source, ...targets)
     }
     return nodes
   }
@@ -261,6 +260,30 @@ export class Relationship<T> {
   }
 
   /**
+   * 인스턴스에 있는 관계의 깊이를 계산합니다. 현재 노드에서 목표 노드까지의 가장 짧은 깊이를 반환해야 합니다.
+   * 시작 노드는 재귀하여 호출될 때 마다 변경됩니다.
+   * @param current 현재 노드입니다.
+   * @param target 목표 노드입니다.
+   * @param depth 재귀호출되며 누적된 깊이입니다.
+   * @param tests 탐색된 노드를 담고있는 배열입니다. 이미 한 번 탐색된 노드는 이 배열에 담깁니다. 상호참조하는 관계로 인해 무한히 탐색되는 것을 방지하는 용도로 사용됩니다.
+   */
+  protected getSearchedDepth(current: T, target: T, depth = 0, tests: T[] = []): number {
+    if (current === target)                 return depth
+    if (Relationship.has(tests, current))   return depth
+
+    Relationship.add(tests, current)
+
+    depth++
+    let min = Infinity
+    const distRelation: Relation<T> = this.__relations.has(current) ? this.__relations.get(current)! : []
+    for (const dist of distRelation) {
+      const distDepth = this.getSearchedDepth(dist, target, depth, tests)
+      min = Math.min(min, distDepth)
+    }
+    return min
+  }
+
+  /**
    * Only the nodes that are related to the node received by the parameter are filtered and returned in a new Relationship instance.
    * You can control calculation depth relationship with depth parameter.
    * @param source The source node.
@@ -439,6 +462,23 @@ export class Relationship<T> {
       }
     }
     return weights
+  }
+
+  /**
+   * Returns the found minimum distance to between source to target.
+   * @param source Node to start
+   * @param target Node to target
+   * @param log If this parameter is set to true, it returns the value to which the log function is applied. This is useful when the value is too high.
+   * @example
+   * const A = state.to('user-a', 'user-b').to('user-b', 'user-c')
+   * A.distance('user-a', 'user-c') // 2
+   */
+  distance(source: T, target: T, log = false): number {
+    let depth = this.getSearchedDepth(source, target)
+    if (log) {
+      depth = Math.log(depth)
+    }
+    return depth
   }
 
   /** Destroy the data in the instance. It is used for garbage collector. */
