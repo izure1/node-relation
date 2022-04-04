@@ -62,4 +62,17 @@ export class Relationship<T> extends RawRelationship<T> {
   drop(...nodes: T[]): this {
     return super.drop.call(this.copy, ...nodes)
   }
+
+  /**
+   * Merge a relation dataset with this instance, and returns it as a new Relationship instance.
+   * If there is a non-overlapping dataset, It will be append to instance.
+   * @param datasets Data set to be merged
+   * @example
+   * const A = state.to('user-a', 'user-b')
+   * const B = state.to('user-a', 'user-c')
+   * const C = A.merge(B.dataset)
+   */
+  merge(...datasets: RelationData<T>[][]): this {
+    return super.merge.call(this.copy, ...datasets)
+  }
 }

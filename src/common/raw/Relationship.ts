@@ -519,6 +519,26 @@ export class Relationship<T> {
     return Math.min(this.depth(a, b, log), this.depth(b, a, log))
   }
 
+  /**
+   * Merge a relation dataset with this instance.
+   * If there is a non-overlapping dataset, It will be append to instance.
+   * @param datasets Data set to be merged
+   * @example
+   * const A = state.to('user-a', 'user-b')
+   * const B = state.to('user-a', 'user-c')
+   * const C = A.merge(B.dataset)
+   */
+  merge(...datasets: RelationData<T>[][]): this {
+    let acc = this.dataset
+    for (const dataset of datasets) {
+      acc = this.getCombinedDataset(acc, dataset)
+    }
+    for (const [key, relation] of acc) {
+      this.ensureRelation(key, ...relation)
+    }
+    return this
+  }
+
   /** Destroy the data in the instance. It is used for garbage collector. */
   clear(): void {
     this.__relations.clear()

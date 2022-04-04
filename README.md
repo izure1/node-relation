@@ -58,12 +58,12 @@ const A = new Relationship().to('a', 'b', 'c')
 
 Check [readme](https://github.com/izure1/node-relation/blob/master/Migration_3_to_4.md)
 
-### Methods
+## Methods
 
 The data inside the instance is immutable.
 The method does not modify the data inside, it returns the result of the calculation as a new instance.
 
-#### constructor(dataset?: `RelationData[]`): `Relationship`
+### ***constructor***(dataset?: `RelationData[]`): `Relationship`
 
 You can pass dataset parameter to init this instance.
 The `RelationData` is type of 2-dimensional array. Check dataset getter description.
@@ -73,7 +73,7 @@ const state = new Relationship([['language', ['English', 'Korean', 'Japanese']]]
 const clone = new Relationship(state.dataset)
 ```
 
-#### `(getter)` dataset: `RelationData[]`
+### `(getter)` ***dataset***: `RelationData[]`
 
 Returns as 2-dimensional array of relationships between nodes in the instance. Relationships are returned to saveable data-type(json).
 
@@ -82,7 +82,7 @@ const state = new Relationship().to('a', 'b').to('b', 'c', 'd')
 state.dataset // [ [a,['b']], [b,['c', 'd']] ]
 ```
 
-#### `(getter)` nodes: `RelationNode[]`
+### `(getter)` ***nodes***: `RelationNode[]`
 
 Get all nodes from the instance.
 
@@ -91,7 +91,7 @@ const state = new Relation().to('a', 'b').to('b', 'c')
 state.nodes // a, b, c
 ```
 
-#### `(getter)` nodeset: `Set<RelationNode>`
+### `(getter)` ***nodeset***: `Set<RelationNode>`
 
 Get all nodes as Set object from the instance.
 
@@ -100,7 +100,7 @@ const state = new Relation().to('a', 'b').to('b', 'c')
 state.nodeset // Set<['a', 'b', 'c']>
 ```
 
-#### `(getter)` oneHot: `Map<RelationNode, number[]>`
+### `(getter)` ***oneHot***: `Map<RelationNode, number[]>`
 
 Get all nodes as one-hot vectors from the instance. It could be used as dataset for machine learning.
 
@@ -112,7 +112,7 @@ vectors // Map<[['a', [1, 0, 0]], ['b', [0, 1, 0]], ['c', [0, 0, 1]]]>
 Array.from(vectors.values()) // [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
 ```
 
-#### `(getter)` zeroVector: `number[]`
+### `(getter)` ***zeroVector***: `number[]`
 
 Get a 1-dimensional vector that was filled 0. The vector's size are same as nodes length of instance. This is useful for representing data that does not belong to anything. It could be used as dataset for machine learning.
 
@@ -123,7 +123,7 @@ const zeroVector = state.zeroHot
 const allVectors = [zeroVector, ...vectors]
 ```
 
-#### `(getter)` label: `Map<RelationNode, number>`
+### `(getter)` ***label***: `Map<RelationNode, number>`
 
 Get all nodes as labeled vector from the instance. It could be used as dataset for machine learning.
 
@@ -135,7 +135,7 @@ vector // Map<[['a', 0], ['b', 1], ['c', 2]]>
 Array.from(vector.values()) // [0, 1, 2]
 ```
 
-#### to(source: `RelationNode`, ...targets: `RelationNode[]`): `Relationship`
+### ***to***(source: `RelationNode`, ...targets: `RelationNode[]`): `Relationship`
 
 Creates a new refer between nodes, and returns it as a Relationship instance.
 This is one-sided relationship between both nodes.
@@ -151,7 +151,7 @@ language ─> Korean
 language ─> Japanese
 ```
 
-#### both(a: `RelationNode`, ...b: `RelationNode[]`): `Relationship`
+### ***both***(a: `RelationNode`, ...b: `RelationNode[]`): `Relationship`
 
 Creates a new relationship between nodes, and returns it as a new Relationship instance.
 Both nodes will know each other.
@@ -176,7 +176,7 @@ language ─> Korean
 language ─> Japanese
 ```
 
-#### all(...nodes: `RelationNode[]`): `Relationship`
+### ***all***(...nodes: `RelationNode[]`): `Relationship`
 
 Creates a new relationship between all each other nodes, and returns it as a new Relationship instance.
 All nodes will know each others.
@@ -192,7 +192,7 @@ harris <─> richard
 richard <─> john
 ```
 
-#### from(source: `RelationNode`, depth?: `number` = -1): `Relationship`
+### ***from***(source: `RelationNode`, depth?: `number` = -1): `Relationship`
 
 Only the nodes that are related to the node received by the parameter are filtered and returned in a new Relationship instance.
 You can control calculation depth relationship with depth parameter. If depth parameter are negative, it's will be calculate all relationship between nodes in instance. Depth parameter default value is -1.
@@ -202,7 +202,7 @@ A.from('language').nodes // language, English, Korean, Japanese
 B.from('English').nodes // language, English, US, France, Italy
 ```
 
-#### where(filter: (node: `RelationNode`, i: `number`, array: `RelationNode[]`) => `boolean`): `Relationship`
+### ***where***(filter: (node: `RelationNode`, i: `number`, array: `RelationNode[]`) => `boolean`): `Relationship`
 
 Returns a new relationship instance with only nodes that meet the conditions.
 
@@ -210,7 +210,7 @@ Returns a new relationship instance with only nodes that meet the conditions.
 A.where((v) => v.includes('Kor')).nodes // Korean
 ```
 
-#### without(...nodes: `RelationNode[]`): `RelationNode[]`
+### ***without***(...nodes: `RelationNode[]`): `RelationNode[]`
 
 Returns the remaining nodes except those received as parameters from the current relationship instance.
 
@@ -218,7 +218,7 @@ Returns the remaining nodes except those received as parameters from the current
 A.from('language').without('language') // English, Korean, Japanese
 ```
 
-#### unlinkTo(source: `RelationNode`, ...targets: `RelationNode[]`): `Relationship`
+### ***unlinkTo***(source: `RelationNode`, ...targets: `RelationNode[]`): `Relationship`
 
 Deletes the relationship between nodes and returns it as a new Relationship instance.
 This is one-sided cut off between both nodes.
@@ -227,7 +227,7 @@ This is one-sided cut off between both nodes.
 B.unlinkTo('English', 'France')
 ```
 
-#### unlinkBoth(a: `RelationNode`, ...b: `RelationNode[]`): `Relationship`
+### ***unlinkBoth***(a: `RelationNode`, ...b: `RelationNode[]`): `Relationship`
 
 Deletes the relationship between nodes and returns it as a new Relationship instance.
 Both nodes will cut off each other.
@@ -236,7 +236,7 @@ Both nodes will cut off each other.
 B.unlinkBoth('English', 'France')
 ```
 
-#### drop(...nodes: `RelationNode[]`): `Relationship`
+### ***drop***(...nodes: `RelationNode[]`): `Relationship`
 
 Delete the node. If the node associated with the deleted node is isolated, it is deleted together. Returns the result with a new Relationship instance.
 
@@ -244,7 +244,7 @@ Delete the node. If the node associated with the deleted node is isolated, it is
 B.drop('language').nodes // English, US, France, Italy
 ```
 
-#### has(node: `RelationNode`): `boolean`
+### ***has***(node: `RelationNode`): `boolean`
 
 Returns whether the instance contains that node.
 
@@ -252,7 +252,7 @@ Returns whether the instance contains that node.
 const hasKorean = B.has('korean') // true
 ```
 
-#### hasAll(...nodes: `RelationNode[]`): `boolean`
+### ***hasAll***(...nodes: `RelationNode[]`): `boolean`
 
 Returns whether the instance contains all of its nodes.
 
@@ -260,7 +260,7 @@ Returns whether the instance contains all of its nodes.
 const hasAll = B.hasAll('Japanese', 'Korean') // true
 ```
 
-#### weight(node: `RelationNode`, log?: `boolean` = `false`): `number`
+### ***weight***(node: `RelationNode`, log?: `boolean` = `false`): `number`
 
 Returns how many nodes are related to the node received by the parameter.
 
@@ -268,7 +268,7 @@ Returns how many nodes are related to the node received by the parameter.
 const weight = B.weight('language')
 ```
 
-#### weights(log?: `boolean` = `false`, normalize?: `boolean` = `false`): `Map<RelationNode, number>`
+### ***weights***(log?: `boolean` = `false`, normalize?: `boolean` = `false`): `Map<RelationNode, number>`
 
 Returns the weight of all nodes. Check the `weight` method.
 
@@ -276,7 +276,7 @@ Returns the weight of all nodes. Check the `weight` method.
 const weights = B.weights()
 ```
 
-#### depth(source: `RelationNode`, target: `RelationNode`, log?: `boolean` = `false`): `number`
+### ***depth***(source: `RelationNode`, target: `RelationNode`, log?: `boolean` = `false`): `number`
 
 Returns the found minimum depth to between source to target.
 
@@ -285,7 +285,7 @@ B.depth('language', 'Korean') // 1
 B.depth('Korean', 'language') // Infinity
 ```
 
-#### distance(a: `RelationNode`, b: `RelationNode`, log?: `boolean` = `false`): `number`
+### ***distance***(a: `RelationNode`, b: `RelationNode`, log?: `boolean` = `false`): `number`
 
 Returns the found minimum distance to between both nodes. This is same as `Math.min(this.depth(a, b), this.depth(b, a))`
 
@@ -293,23 +293,22 @@ Returns the found minimum distance to between both nodes. This is same as `Math.
 B.distance('Korean', 'language') // 1
 ```
 
-#### clear(): `void`
+### ***merge***(...datasets: `RelationData[]`): `Relationship`
+
+Merge a relation dataset with this instance, and returns it as a new Relationship instance.
+If there is a non-overlapping dataset, It will be append to instance.
+
+```javascript
+const A = state.to('user-a', 'user-b')
+const B = state.to('user-c', 'user-d')
+const C = A.merge(B.dataset).nodes // user-a, user-b, user-c, user-d
+```
+
+### ***clear***(): `void`
 
 Destroy the data in the instance. It is used for garbage collector.
 
 ## Try it simply
-
-```javascript
-const state = new Relationship()
-            .to('language', 'English', 'Korean', 'Japanese')
-            .both('English', 'US', 'France', 'Italy')
-
-console.log(`Languages: ${ state.from('language').without('language') }`)
-// Languages: English, Korean, Japanese, US, France, Italy
-
-console.log(`English country: ${ state.from('English').drop('language').without('English') }`)
-// English country: US, France, Italy 
-```
 
 ## Applying (Advanced usage, with Typescript)
 
@@ -340,44 +339,23 @@ console.log( state.from('server-b').without('server-b') ) // userC
 ```
 
 ```javascript
-import { Relationship } from 'node-relation'
+import { Relationship } from 'node-relation/dist/umd/raw/index'
 
-class Human {
-    name: string
-    constructor(name: string) {
-        this.name = name
-    }
-    sayHello() {
-        console.log(`${this.name}: Hello, my name is ${this.name}`)
-    }
-}
+const sentence = 'what will the fat cat sit on'
+const words = sentence.split(' ')
 
-// Team A
-const john      = new Human('john') // leader
-const paul      = new Human('paul')
-const lawrence  = new Human('lawrence')
+let state = new Relationship<string>()
 
-// Team B
-const jacob     = new Human('jacob') // leader
-const richard   = new Human('richard')
-const collin    = new Human('collin')
-
-// Manager
-const manager   = new Human('harris')
-
-// Create relationship
-let state: Relationship<Human> = new Relationship
-
-state = state.to(manager, john, jacob)
-             .all(john, paul, lawrence)
-             .all(jacob, richard, collin)
-
-console.log(`${manager.name}: Here are the leaders of my team.`)
-state.from(manager, 1).without(manager).forEach((leader: Human) => {
-    leader.sayHello()
-    console.log(`${leader.name}: And... these are my teammates.`)
-    state.from(leader).without(leader).forEach((member: Human) => {
-        member.sayHello()
-    })
+words.forEach((word, i) => {
+  const next = words[i+1]
+  if (next) {
+    state.to(word, next)
+  }
 })
+
+const oneHot = state.oneHot // Map<[['what', [1,0,0,0,0,0,0]], ['will', [0,1,0,0,0,0,0]], ...]>
+const oneHotVectors = Array.from(oneHot.values())
+
+const label = state.label // Map<[['what', 0], ['will', 1], ...]>
+const labels = Array.from(label.values())
 ```
