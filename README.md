@@ -344,7 +344,7 @@ import { Relationship } from 'node-relation/dist/umd/raw/index'
 const sentence = 'what will the fat cat sit on'
 const words = sentence.split(' ')
 
-let state = new Relationship<string>()
+const state = new Relationship<string>()
 
 words.forEach((word, i) => {
   const next = words[i+1]

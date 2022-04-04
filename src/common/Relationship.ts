@@ -70,7 +70,7 @@ export class Relationship<T> extends RawRelationship<T> {
    * @example
    * const A = state.to('user-a', 'user-b')
    * const B = state.to('user-a', 'user-c')
-   * const C = A.merge(B.dataset)
+   * const C = A.merge(B.dataset).nodes // user-a, user-b, user-c
    */
   merge(...datasets: RelationData<T>[][]): this {
     return super.merge.call(this.copy, ...datasets)
