@@ -309,21 +309,22 @@ export class Relationship<T> {
    * Returns a new relationship instance with only nodes that meet the conditions or the relational node.  
    * This is similar to the `from` method, but it is useful when you want to use more detailed conditions.
    * @param filter condition filter callback function
+   * @param depth If depth parameter are negative, it's will be calculate all relationship between nodes in instance. Depth parameter default value is -1.
+   * @returns new Relationship instance.
    * @example
    * // user-a -> user-b
    * // user-c -> user-d
    * const A = state.to('user-a', 'user-b').to('user-c', 'user-d')
    * A.where((node) => node.includes('a')) // user-a, user-b
    */
-  where(filter: (node: T, i: number, array: T[]) => boolean): this {
+  where(filter: (node: T, i: number, array: T[]) => boolean, depth = -1): this {
+    --depth
     let accData: RelationData<T>[] = []
-
     const correctNodes = this.nodes.filter(filter)
-    correctNodes.forEach((node) => {
-      const append = this.getSearchedRelationDataset(node, -1)
+    for (const node of correctNodes) {
+      const append = this.getSearchedRelationDataset(node, depth)
       accData = this.getCombinedDataset(accData, append)
-    })
-
+    }
     return new (this.constructor as any)(accData) as this
   }
 
