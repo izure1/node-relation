@@ -308,6 +308,7 @@ export class Relationship<T> {
   /**
    * Returns a new relationship instance with only nodes that meet the conditions or the relational node.  
    * This is similar to the `from` method, but it is useful when you want to use more detailed conditions.
+   * You can control calculation depth relationship with depth parameter.
    * @param filter condition filter callback function
    * @param depth If depth parameter are negative, it's will be calculate all relationship between nodes in instance. Depth parameter default value is -1.
    * @returns new Relationship instance.

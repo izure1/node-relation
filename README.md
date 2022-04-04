@@ -202,7 +202,7 @@ A.from('language').nodes // language, English, Korean, Japanese
 B.from('English').nodes // language, English, US, France, Italy
 ```
 
-### ***where***(filter: (node: `RelationNode`, i: `number`, array: `RelationNode[]`) => `boolean`): `Relationship`
+### ***where***(filter: (node: `RelationNode`, i: `number`, array: `RelationNode[]`) => `boolean`, depth?: `number` = -1): `Relationship`
 
 Returns a new relationship instance with only nodes that meet the conditions.
 
