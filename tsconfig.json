@@ -64,6 +64,6 @@
     "forceConsistentCasingInFileNames": true  /* Disallow inconsistently-cased references to the same file. */
   },
   "exclude": [
-      ".old", ".vscode", "dist", "node_modules"
+    ".old", ".vscode", "dist", "node_modules", "**/*.test.ts"
   ]
 }

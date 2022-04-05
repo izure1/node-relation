@@ -132,6 +132,23 @@ export class Relationship<T> {
   }
 
   /**
+   * Returns the clustering models of this instance in the form of a two-dimensional array.
+   */
+  get clusters(): T[][] {
+    const clusters: T[][] = []
+    const nodes = this.nodeset
+    for (const node of nodes) {
+      const relation = this.from(node)
+      const borders = relation.nodes
+      clusters.push(borders)
+      for (const border of borders) {
+        nodes.delete(border)
+      }
+    }
+    return clusters
+  }
+
+  /**
    * Returns a new instance of this.
    * The clone instance are copy dataset from this, but It's not deep-copied object.
    */

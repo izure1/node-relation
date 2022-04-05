@@ -40,6 +40,8 @@ Added new methods.
 
 ### `distance` (>=4.3.1)
 
+### (getter)`clusters` (>=4.4.0)
+
 Some method names have been changed.
 
 ### `setReferTo` => `to`

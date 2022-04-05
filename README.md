@@ -135,6 +135,15 @@ vector // Map<[['a', 0], ['b', 1], ['c', 2]]>
 Array.from(vector.values()) // [0, 1, 2]
 ```
 
+### `(getter)` ***clusters***: `RelationNode[][]`
+
+Returns the clustering models of this instance in the form of a two-dimensional array.
+
+```javascript
+const state = new Relation.to('a', 'b', 'c').to('d', 'e')
+state.clusters // [[a, b, c], [d, e]]
+```
+
 ### ***to***(source: `RelationNode`, ...targets: `RelationNode[]`): `Relationship`
 
 Creates a new refer between nodes, and returns it as a Relationship instance.
