@@ -1,6 +1,6 @@
 {
   "name": "node-relation",
-  "version": "4.4.0",
+  "version": "4.4.1",
   "description": "Manage strings, number, object that are related to each other.",
   "main": "dist/umd/index.js",
   "module": "dist/esm/index.js",
@@ -32,11 +32,13 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-typescript": "^7.16.7",
     "@types/jest": "^27.4.1",
     "@types/node": "12.12.2",
+    "babel-loader": "^8.2.4",
     "jest": "^27.5.1",
     "ts-jest": "^27.1.4",
-    "ts-loader": "8.0.4",
     "typescript": "4.0.3",
     "webpack": "^5.68.0",
     "webpack-cli": "^4.9.2"
