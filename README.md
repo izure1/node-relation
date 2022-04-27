@@ -8,17 +8,17 @@ Check the code.
 ```javascript
 import { Relationship } from 'node-relation'
 
-const A = new Relationship().to('a', 'b', 'c')
-console.log(A.nodes) // ['a', 'b', 'c']
+let state = new Relationship().to('a', 'b')
+state.nodes // ['a', 'b']
 
-const B = A.to('b', 'd')
-console.log(B.nodes) // ['a', 'b', 'c', 'd']
+state = state.to('b', 'c')
+state.nodes // ['a', 'b', 'c']
 
-const C = B.to('e', 'f')
-console.log(C.from('e').nodes) // ['e', 'f']
+state = state.to('c', 'd')
+state.from('c').nodes // ['c', 'd']
 
-const D = C.to('e', 'a')
-console.log(D.from('e').nodes) // ['a', 'b', 'c', 'd', 'e', 'f']
+state = state.to('d', 'a')
+state.from('c').nodes // ['a', 'b', 'c', 'd']
 ```
 
 ## Install
@@ -148,6 +148,7 @@ Returns the remaining nodes except those received as parameters from the current
 const state = new Relationship()
   .to('language', 'English', 'Korean', 'Japanese')
 
+state.from('language').nodes // language, English, Korean, Japanese
 state.from('language').without('language') // English, Korean, Japanese
 ```
 
