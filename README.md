@@ -119,7 +119,7 @@ Get a 1-dimensional vector that was filled 0. The vector's size are same as node
 ```javascript
 const state = new Relation().to('a', 'b').to('b', 'c')
 const vectors = state.oneHot
-const zeroVector = state.zeroHot
+const zeroVector = state.zeroVector
 const allVectors = [zeroVector, ...vectors]
 ```
 

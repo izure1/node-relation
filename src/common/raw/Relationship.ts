@@ -108,7 +108,7 @@ export class Relationship<T> {
   /**
    * Get a 1-dimensional vector that was filled 0. The vector's size are same as nodes length of instance. This is useful for representing data that does not belong to anything. It could be used as dataset for machine learning.
    * @example
-   * const voidVector = state.zeroHot
+   * const voidVector = state.zeroVector
    * const vectors = Array.from(state.oneHot.values())
    * const allVectors = [voidVector, ...vectors]
    */
