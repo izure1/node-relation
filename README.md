@@ -237,7 +237,7 @@ const state = new Relationship()
   .to('b', 'd')
   .to('c', 'd')
 
-const weight = state.weight('c') // 3
+const weight = state.weight('d') // 3
 ```
 
 ### ***weights***(log?: `boolean` = `false`, normalize?: `boolean` = `false`): `Map<T, number>`
@@ -249,8 +249,13 @@ const state = new Relationship()
   .to('a', 'd')
   .to('b', 'd')
   .to('c', 'd')
+  .to('d', 'a')
 
+// Map<[['a', 1], ['b', 0], ['c', 0], ['d', 3]]>
 const weights = state.weights()
+
+// Map<[['a', 0.333...], ['b', 0], ['c', 0], ['d', 1]]>
+const normalizedWeights = state.weights(false, true) 
 ```
 
 ### ***depth***(source: `T`, target: `T`, log?: `boolean` = `false`): `number`
@@ -351,7 +356,7 @@ const state = new Relationship().to('a', 'b').to('b', 'c')
 
 const vectors = state.oneHot
 const zeroVector = state.zeroVector // [0, 0, 0]
-const allVectors = [zeroVector, ...vectors]
+const allVectors = [zeroVector, ...vectors.values()]
 ```
 
 ### `(getter)` ***label***: `Map<T, number>`
@@ -371,8 +376,11 @@ Array.from(vector.values()) // [0, 1, 2]
 Returns the clustering models of this instance in the form of a two-dimensional array.
 
 ```javascript
-const state = new Relationship().to('a', 'b', 'c').to('d', 'e')
+let state = new Relationship().to('a', 'b', 'c').to('d', 'e')
 state.clusters // [[a, b, c], [d, e]]
+
+state = state.to('e', 'a')
+state.clusters // [[a, b, c, d, e]]
 ```
 
 ## Try it simply
