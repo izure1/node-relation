@@ -1,11 +1,41 @@
+import equal from 'fast-deep-equal'
+
+import { EqualMap } from '../EqualMap'
+
+
 export type Relation<T> = T[]
 export type RelationData<T> = [T, Relation<T>]
 
 export class Relationship<T> {
+  /** Is this instance ignore strict references to variables? */
+  readonly useEqual: boolean
   protected readonly __relations: Map<T, Relation<T>>
 
-  constructor(data: RelationData<T>[] = []) {
-    this.__relations = new Map(data)
+  /**
+   * You can pass dataset parameter to init this instance.
+   * The `RelationData` is type of 2-dimensional tuple array. Check `dataset` getter description.
+   * @param dataset Initial dataset
+   * @param useEqual If you want ignore strict references to variables, this helps you treat other objects as the same variable.
+   * @example
+   * const state = new Relationship([ ['a', ['b', 'c', 'd']] ])
+   * const clone = new Relationship(state.dataset)
+   */
+  constructor(dataset: RelationData<T>[] = [], useEqual = false) {
+    this.useEqual = useEqual
+    this.__relations = Relationship.__CreateMap(dataset, useEqual)
+  }
+
+  private static __CreateMap<K ,V>(data: [K, V][] = [], useEqual: boolean) {
+    return useEqual ? new EqualMap(data) : new Map(data)
+  }
+
+  protected static findIndex<T>(useEqual: boolean, array: T[], node: T): number {
+    if (useEqual) {
+      return array.findIndex((v) => equal(node, v))
+    }
+    else {
+      return array.indexOf(node)
+    }
   }
 
   /**
@@ -13,8 +43,8 @@ export class Relationship<T> {
    * @param array 대상 배열입니다.
    * @param node 검색할 노드입니다.
    */
-  protected static has<T>(array: T[], node: T): boolean {
-    return array.includes(node)
+  protected static has<T>(useEqual: boolean, array: T[], node: T): boolean {
+    return Relationship.findIndex(useEqual, array, node) !== -1
   }
 
   /**
@@ -22,9 +52,9 @@ export class Relationship<T> {
    * @param array 대상 배열입니다.
    * @param nodes 추가할 노드입니다.
    */
-  protected static add<T>(array: T[], ...nodes: T[]): T[] {
+  protected static add<T>(useEqual: boolean, array: T[], ...nodes: T[]): T[] {
     for (const node of nodes) {
-      if (!Relationship.has(array, node)) {
+      if (!Relationship.has(useEqual, array, node)) {
         array.push(node)
       }
     }
@@ -36,11 +66,11 @@ export class Relationship<T> {
    * @param array 대상 배열입니다.
    * @param node 제거할 노드입니다.
    */
-  protected static drop<T>(array: T[], ...nodes: T[]): T[] {
+  protected static drop<T>(useEqual: boolean, array: T[], ...nodes: T[]): T[] {
     for (const node of nodes) {
-      if (Relationship.has(array, node)) {
-        const i = array.indexOf(node)
-        if (i !== -1) array.splice(i, 1)
+      const i = Relationship.findIndex(useEqual, array, node)
+      if (i !== -1) {
+        array.splice(i, 1)
       }
     }
     return array
@@ -71,7 +101,7 @@ export class Relationship<T> {
   get nodes(): T[] {
     const nodes: T[] = []
     for (const [source, targets] of this.__relations) {
-      Relationship.add(nodes, source, ...targets)
+      Relationship.add(this.useEqual, nodes, source, ...targets)
     }
     return nodes
   }
@@ -157,7 +187,7 @@ export class Relationship<T> {
   }
 
   protected get copy(): this {
-    return new (this.constructor as any)(this.dataset)
+    return new (this.constructor as any)(this.dataset, this.useEqual)
   }
 
   /**
@@ -170,7 +200,7 @@ export class Relationship<T> {
     }
     const relation = this.__relations.get(source)!
     for (const dist of targets) {
-      Relationship.add(relation, dist)
+      Relationship.add(this.useEqual, relation, dist)
     }
     return relation
   }
@@ -221,7 +251,7 @@ export class Relationship<T> {
   all(...nodes: T[]): this {
     for (const node of nodes) {
       const relation = this.ensureRelation(node, ...nodes)
-      Relationship.drop(relation, node)
+      Relationship.drop(this.useEqual, relation, node)
     }
     return this
   }
@@ -233,23 +263,23 @@ export class Relationship<T> {
    * @param b 병합할 릴레이션데이터 배열입니다.
    */
   protected getCombinedDataset(a: RelationData<T>[], b: RelationData<T>[]): RelationData<T>[] {
-    const map = new Map<T, Relation<T>>()
-    const mapA = new Map<T, Relation<T>>(a)
-    const mapB = new Map<T, Relation<T>>(b)
+    const mapA = Relationship.__CreateMap<T, Relation<T>>(a, this.useEqual)
+    const mapB = Relationship.__CreateMap<T, Relation<T>>(b, this.useEqual)
+    const map = Relationship.__CreateMap<T, Relation<T>>(undefined, this.useEqual)
 
     for (const [sourceA, relationA] of mapA) {
       if (!map.has(sourceA)) {
         map.set(sourceA, relationA)
       }
       const relation = map.get(sourceA)!
-      Relationship.add(relation, ...relationA)
+      Relationship.add(this.useEqual, relation, ...relationA)
     }
     for (const [sourceB, relationB] of mapB) {
       if (!map.has(sourceB)) {
         map.set(sourceB, relationB)
       }
       const relation = map.get(sourceB)!
-      Relationship.add(relation, ...relationB)
+      Relationship.add(this.useEqual, relation, ...relationB)
     }
 
     return Array.from(map)
@@ -265,11 +295,12 @@ export class Relationship<T> {
   protected getSearchedRelationDataset(source: T, depth: number, accDataset: RelationData<T>[] = [[source, []]], tests: T[] = []): RelationData<T>[] {
     const distRelation: Relation<T>         = this.__relations.has(source) ? this.__relations.get(source)! : []
     const srcDataset: RelationData<T>[]     = [[source, distRelation]]
-    if (!depth)                             return srcDataset
-    if (!distRelation)                      return srcDataset
-    if (Relationship.has(tests, source))    return srcDataset
 
-    Relationship.add(tests, source)
+    if (!depth)                                           return srcDataset
+    if (!distRelation)                                    return srcDataset
+    if (Relationship.has(this.useEqual, tests, source))   return srcDataset
+
+    Relationship.add(this.useEqual, tests, source)
 
     depth--
     accDataset = this.getCombinedDataset(accDataset, srcDataset)
@@ -289,10 +320,11 @@ export class Relationship<T> {
    * @param tests 탐색된 노드를 담고있는 배열입니다. 이미 한 번 탐색된 노드는 이 배열에 담깁니다. 상호참조하는 관계로 인해 무한히 탐색되는 것을 방지하는 용도로 사용됩니다.
    */
   protected getSearchedDepth(current: T, target: T, depth = 0, tests: T[] = []): number {
-    if (current === target)                 return depth
-    if (Relationship.has(tests, current))   return Infinity
+    if (this.useEqual === false && current === target)        return depth
+    if (this.useEqual === true  && equal(current, target))    return depth
+    if (Relationship.has(this.useEqual, tests, current))      return Infinity
 
-    Relationship.add(tests, current)
+    Relationship.add(this.useEqual, tests, current)
     depth++
 
     let newDepth = Infinity
@@ -319,7 +351,7 @@ export class Relationship<T> {
   from(source: T, depth: number = -1): this {
     const clone = this.copy
     const relationDataset = clone.getSearchedRelationDataset(source, --depth)
-    return new (this.constructor as any)(relationDataset)
+    return new (this.constructor as any)(relationDataset, this.useEqual)
   }
 
   /**
@@ -343,7 +375,7 @@ export class Relationship<T> {
       const append = this.getSearchedRelationDataset(node, depth)
       accData = this.getCombinedDataset(accData, append)
     }
-    return new (this.constructor as any)(accData) as this
+    return new (this.constructor as any)(accData, this.useEqual) as this
   }
 
   /**
@@ -356,7 +388,7 @@ export class Relationship<T> {
    * B.without('user-a') // user-b, user-c
    */
   without(...nodes: T[]): T[] {
-    return Relationship.drop(this.nodes, ...nodes)
+    return Relationship.drop(this.useEqual, this.nodes, ...nodes)
   }
 
   /**
@@ -367,7 +399,7 @@ export class Relationship<T> {
   protected unlinkRefersFromSource(source: T, ...targets: T[]): void {
     const relation = this.__relations.get(source)
     if (relation) {
-      Relationship.drop(relation, ...targets)
+      Relationship.drop(this.useEqual, relation, ...targets)
     }
   }
 
@@ -412,7 +444,7 @@ export class Relationship<T> {
    */
   drop(...nodes: T[]): this {
     for (const relation of this.__relations.values()) {
-      Relationship.drop(relation, ...nodes)
+      Relationship.drop(this.useEqual, relation, ...nodes)
     }
     for (const node of nodes) {
       this.__relations.delete(node)
@@ -430,7 +462,7 @@ export class Relationship<T> {
   has(node: T): boolean {
     let isExists = this.__relations.has(node)
     for (const [key, relation] of this.__relations) {
-      if (key === node || Relationship.has(relation, node)) {
+      if (key === node || Relationship.has(this.useEqual, relation, node)) {
         isExists = true
         break
       }
@@ -467,7 +499,7 @@ export class Relationship<T> {
   weight(node: T, log = false): number {
     let weight = 0
     for (const relation of this.__relations.values()) {
-      if (Relationship.has(relation, node)) {
+      if (Relationship.has(this.useEqual, relation, node)) {
         weight++
       }
     }

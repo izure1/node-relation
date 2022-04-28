@@ -1,10 +1,6 @@
 import { Relationship as RawRelationship, RelationData } from './raw/Relationship'
 
 export class Relationship<T> extends RawRelationship<T> {
-  constructor(data: RelationData<T>[] = []) {
-    super(data)
-  }
-
   /**
    * Creates a new refer between nodes, and returns it as a Relationship instance.
    * This is one-sided relationship between both nodes.

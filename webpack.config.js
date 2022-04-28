@@ -17,7 +17,10 @@ const base = {
     ]
   },
   resolve: {
-    extensions: ['.ts', '.js']
+    extensions: ['.ts', '.js'],
+    fallback: {
+      assert: require.resolve('assert')
+    }
   }
 }
 

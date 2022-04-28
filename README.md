@@ -298,7 +298,7 @@ const C = A.merge(B.dataset).nodes // user-a, user-b, user-c, user-d
 
 Destroy the data in the instance. It is used for garbage collector.
 
-### ***constructor***(dataset?: `RelationData[]`): `Relationship`
+### ***constructor***(dataset?: `RelationData[]`, useEqual?: `boolean` = `false`): `Relationship`
 
 You can pass dataset parameter to init this instance.
 The `RelationData` is type of 2-dimensional tuple array. Check dataset getter description.
@@ -306,6 +306,16 @@ The `RelationData` is type of 2-dimensional tuple array. Check dataset getter de
 ```javascript
 const state = new Relationship([ ['a', ['b', 'c', 'd']] ])
 const clone = new Relationship(state.dataset) 
+```
+
+If you want ignore strict references to variables, You can use the `useEqual` option. This helps you treat other objects as the same variable.
+
+```javascript
+let state = new Relationship()
+
+state = state.to({ a: 1 }, { a: 2 })
+state = state.to({ a: 1 }, { a: 3 })
+state.nodes // { test: 1 }, { test: 2 }, { test: 3 }
 ```
 
 ### `(getter)` ***dataset***: `RelationData[]`
