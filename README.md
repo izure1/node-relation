@@ -311,7 +311,8 @@ const clone = new Relationship(state.dataset)
 If you want ignore strict references to variables, You can use the `useEqual` option. This helps you treat other objects as the same variable.
 
 ```javascript
-let state = new Relationship()
+const useEqual = true
+let state = new Relationship(null, useEqual)
 
 state = state.to({ a: 1 }, { a: 2 })
 state = state.to({ a: 1 }, { a: 3 })
