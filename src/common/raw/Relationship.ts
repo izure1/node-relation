@@ -127,11 +127,14 @@ export class Relationship<T> {
   get oneHot(): Map<T, number[]> {
     const vectors = new Map<T, number[]>()
     const nodes = this.nodes
-    nodes.forEach((node, i) => {
-      const vector = new Array<number>(nodes.length).fill(0)
-      vector[i] = 1
+
+    let i = 0
+    const len = nodes.length
+    for (const node of nodes) {
+      const vector = new Array<number>(len).fill(0)
+      vector[i++] = 1
       vectors.set(node, vector)
-    })
+    }
     return vectors
   }
 
@@ -155,9 +158,11 @@ export class Relationship<T> {
   get label(): Map<T, number> {
     const labels = new Map<T, number>()
     const nodes = this.nodes
-    nodes.forEach((node, i) => {
-      labels.set(node, i)
-    })
+
+    let i = 0
+    for (const node of nodes) {
+      labels.set(node, i++)
+    }
     return labels
   }
 
