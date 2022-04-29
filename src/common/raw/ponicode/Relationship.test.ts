@@ -57,3 +57,18 @@ describe("Relationship.Relationship.add", () => {
         expect(inst.drop(true, array, [1]).sort()).toEqual([[2], [3]].sort())
     })
 })
+
+// @ponicode
+describe("Relationship.Relationship.reverse", () => {
+    let inst: Relationship.Relationship<number>
+
+    beforeEach(() => {
+      inst = new Relationship.Relationship()
+      inst.to(1, 2, 3).to(3, 4)
+    })
+    
+    test("0", () => {
+        const reversed = inst.reverse
+        expect(reversed.from(2).nodes.sort()).toEqual([1, 2].sort())
+    })
+})

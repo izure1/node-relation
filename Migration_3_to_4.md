@@ -42,6 +42,10 @@ Added new methods.
 
 ### (getter)`clusters` (>=4.4.0)
 
+### `merge` (>=4.4.0)
+
+### (getter)`reverse` (>=4.6.0)
+
 Some method names have been changed.
 
 ### `setReferTo` => `to`

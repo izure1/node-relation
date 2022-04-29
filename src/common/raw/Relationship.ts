@@ -179,6 +179,27 @@ export class Relationship<T> {
   }
 
   /**
+   * Returns the instance in which the relationship of the node is reversed.
+   */
+  get reverse(): this {
+    const { useEqual } = this
+    const map = Relationship.__CreateMap<T, T[]>(undefined, useEqual)
+
+    for (const [key, relation] of this.__relations) {
+      for (const node of relation) {
+        if (!map.has(node)) {
+          map.set(node, [])
+        }
+        const reverseRelation = map.get(node)!
+        Relationship.add(useEqual, reverseRelation, key)
+      }
+    }
+
+    const dataset = Array.from(map)
+    return new (this.constructor as any)(dataset, useEqual)
+  }
+
+  /**
    * Returns a new instance of this.
    * The clone instance are copy dataset from this, but It's not deep-copied object.
    */
