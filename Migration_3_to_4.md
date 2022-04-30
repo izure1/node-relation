@@ -46,6 +46,8 @@ Added new methods.
 
 ### (getter)`reverse` (>=4.6.0)
 
+### `raw` (>=4.6.0)
+
 Some method names have been changed.
 
 ### `setReferTo` => `to`

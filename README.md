@@ -292,6 +292,24 @@ If there is a non-overlapping dataset, It will be append to instance.
 const A = state.to('user-a', 'user-b')
 const B = state.to('user-c', 'user-d')
 const C = A.merge(B.dataset).nodes // user-a, user-b, user-c, user-d
+
+```
+
+### ***raw***(node: `T`): `T`|`undefined`
+
+This method for instance that `useEqual` options. It returns a original value from `node` parameter.
+It will be useful when using between returned Map from `nodeset`, `oneHot`, `label` getters and `weights` method.
+
+```javascript
+const useEqual = true
+const state = new Relationship(undefined, useEqual).to({ name: 'a' }, { name: 'b' })
+const weights = state.weights()
+
+weights.get({ name: 'b' })
+// undefined. because 'weights' map instance doesn't using equal system.
+
+const raw = state.raw({ name: 'b' })
+weights.get(raw) // 1
 ```
 
 ### ***clear***(): `void`
@@ -392,6 +410,16 @@ state.clusters // [[a, b, c], [d, e]]
 
 state = state.to('e', 'a')
 state.clusters // [[a, b, c, d, e]]
+```
+
+### `(getter)` ***reverse***: `Relationship`
+
+Returns the instance in which the relationship of the node is reversed.
+
+```javascript
+const state = new Relationship().to('a', 'b').to('b', 'c')
+
+state.reverse.from('c').nodes // [a, b, c]
 ```
 
 ## Try it simply

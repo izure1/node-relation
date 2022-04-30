@@ -616,6 +616,34 @@ export class Relationship<T> {
     return this
   }
 
+  /**
+   * This method for instance that `useEqual` options. It returns a original value from `node` parameter.
+   * It will be useful when using between returned Map from `nodeset`, `oneHot`, `label` getters and `weights` method.
+   * @param node Node to find.
+   * @example
+   * const useEqual = true
+   * const state = new Relationship(undefined, useEqual).to({ name: 'a' }, { name: 'b' })
+   * const weights = state.weights()
+   * 
+   * weights.get({ name: 'b' }) // undefined. because 'weights' map instance doesn't using equal system.
+   * 
+   * const raw = state.raw({ name: 'b' })
+   * weights.get(raw) // 1
+   */
+  raw(node: T): T|undefined {
+    const nodes = this.nodes
+    if (this.useEqual) {
+      for (const t of nodes) {
+        if (equal(node, t)) return t
+      }
+    }
+    else {
+      for (const t of nodes) {
+        if (node === t) return t
+      }
+    }
+  }
+
   /** Destroy the data in the instance. It is used for garbage collector. */
   clear(): void {
     this.__relations.clear()

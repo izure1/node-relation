@@ -20,7 +20,7 @@ export class EqualMap<K, V> extends Map<K, V> {
   delete(key: K): boolean {
     let exists = false
     for (const k of this.keys()) {
-      if (equal(key, k)) {
+      if (equal(k, key)) {
         super.delete(k)
         exists = true
       }
@@ -37,9 +37,7 @@ export class EqualMap<K, V> extends Map<K, V> {
 
   get(key: K): V|undefined {
     for (const [k, v] of this) {
-      if (equal(key, k)) return v
+      if (equal(key, k)) return v as V
     }
   }
 }
-
-var a = new EqualMap<number, number>()

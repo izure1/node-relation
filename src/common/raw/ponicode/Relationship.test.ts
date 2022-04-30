@@ -39,7 +39,6 @@ describe("Relationship.Relationship.clusters", () => {
     })
 })
 
-// @ponicode
 describe("Relationship.Relationship.add", () => {
     let inst: any = Relationship.Relationship
     
@@ -58,7 +57,6 @@ describe("Relationship.Relationship.add", () => {
     })
 })
 
-// @ponicode
 describe("Relationship.Relationship.reverse", () => {
     let inst: Relationship.Relationship<number>
 
@@ -70,5 +68,24 @@ describe("Relationship.Relationship.reverse", () => {
     test("0", () => {
         const reversed = inst.reverse
         expect(reversed.from(2).nodes.sort()).toEqual([1, 2].sort())
+    })
+})
+
+// @ponicode
+describe("Relationship.Relationship.raw", () => {
+    let inst: Relationship.Relationship<{ name: string }>
+
+    beforeEach(() => {
+        inst = new Relationship.Relationship(undefined, true)
+        inst.to({ name: 'a' }, { name: 'b' })
+    })
+
+    test("0", () => {
+        const weights = inst.weights()
+
+        expect(weights.get({ name: 'b' })).toBe(undefined)
+
+        const raw = inst.raw({ name: 'b' })
+        expect(weights.get(raw!)).toBe(1)
     })
 })
