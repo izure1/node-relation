@@ -34,7 +34,7 @@ npm install node-relation
 ### Browser (umd)
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/node-relation@latest/dist/umd/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/node-relation@4.x.x/dist/umd/index.min.js"></script>
 <script>
   const state = new NodeRelation.Relationship().to('a', 'b', 'c')
 </script>
@@ -43,7 +43,7 @@ npm install node-relation
 ### Browser (esnext)
 
 ```javascript
-import { Relationship } from 'https://cdn.jsdelivr.net/npm/node-relation@latest/dist/esm/index.min.js'
+import { Relationship } from 'https://cdn.jsdelivr.net/npm/node-relation@4.x.x/dist/esm/index.min.js'
 ```
 
 ### Node.js
