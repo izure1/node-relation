@@ -471,7 +471,7 @@ words.forEach((word, i) => {
 const oneHot = state.oneHot // Map<[['what', [1,0,0,0,0,0,0]], ['will', [0,1,0,0,0,0,0]], ...]>
 const oneHotVectors = Array.from(oneHot.values())
 
-const label = state.label // Map<[['what', 0], ['will', 1], ...]>
+const label = state.label // Map<[['what', 1], ['will', 2], ...]>
 const labels = Array.from(label.values())
 ```
 
