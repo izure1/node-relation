@@ -194,7 +194,7 @@ let stateB = new Relationship()
   .to('b', 'c')
 
 stateB = stateB.drop('b')
-stateB.nodes // a
+stateB.nodes // empty
 
 let stateC = new Relationship()
   .to('a', 'b')
