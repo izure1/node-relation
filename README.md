@@ -291,8 +291,9 @@ If there is a non-overlapping dataset, It will be append to instance.
 ```javascript
 const A = state.to('user-a', 'user-b')
 const B = state.to('user-c', 'user-d')
-const C = A.merge(B.dataset).nodes // user-a, user-b, user-c, user-d
+const C = A.merge(B.dataset)
 
+C.nodes // user-a, user-b, user-c, user-d
 ```
 
 ### ***raw***(node: `T`): `T`|`undefined`
@@ -334,7 +335,7 @@ let state = new Relationship(null, useEqual)
 
 state = state.to({ a: 1 }, { a: 2 })
 state = state.to({ a: 1 }, { a: 3 })
-state.nodes // { test: 1 }, { test: 2 }, { test: 3 }
+state.nodes // { a: 1 }, { a: 2 }, { a: 3 }
 ```
 
 ### `(getter)` ***dataset***: `RelationData[]`
@@ -396,8 +397,8 @@ Get all nodes as labeled vector from the instance. It could be used as dataset f
 const state = new Relationship().to('a', 'b').to('b', 'c')
 const vector = state.label
 
-vector // Map<[['a', 0], ['b', 1], ['c', 2]]>
-Array.from(vector.values()) // [0, 1, 2]
+vector // Map<[['a', 1], ['b', 2], ['c', 3]]>
+Array.from(vector.values()) // [1, 2, 3]
 ```
 
 ### `(getter)` ***clusters***: `T[][]`

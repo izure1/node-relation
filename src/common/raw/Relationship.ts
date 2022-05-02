@@ -159,7 +159,7 @@ export class Relationship<T> {
     const labels = new Map<T, number>()
     const nodes = this.nodes
 
-    let i = 0
+    let i = 1
     for (const node of nodes) {
       labels.set(node, i++)
     }
