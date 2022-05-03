@@ -240,7 +240,7 @@ const state = new Relationship()
 const weight = state.weight('d') // 3
 ```
 
-### ***weights***(log?: `boolean` = `false`, normalize?: `boolean` = `false`): `Map<T, number>`
+### ***weights***(log?: `boolean` = `false`, normalize?: `boolean` = `false`, toScale?: `boolean` = `false`): `Map<T, number>`
 
 Returns the weight of all nodes. Check the `weight` method.
 
@@ -255,7 +255,7 @@ const state = new Relationship()
 const weights = state.weights()
 
 // Map<[['a', 0.333...], ['b', 0], ['c', 0], ['d', 1]]>
-const normalizedWeights = state.weights(false, true) 
+const normalizedWeights = state.weights(false, true)
 ```
 
 ### ***depth***(source: `T`, target: `T`, log?: `boolean` = `false`): `number`
