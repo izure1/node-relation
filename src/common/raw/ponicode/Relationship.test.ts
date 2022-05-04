@@ -71,7 +71,6 @@ describe("Relationship.Relationship.reverse", () => {
     })
 })
 
-// @ponicode
 describe("Relationship.Relationship.raw", () => {
     let inst: Relationship.Relationship<{ name: string }>
 
@@ -87,5 +86,26 @@ describe("Relationship.Relationship.raw", () => {
 
         const raw = inst.raw({ name: 'b' })
         expect(weights.get(raw!)).toBe(1)
+    })
+})
+
+// @ponicode
+describe("Relationship.Relationship.weights", () => {
+    let inst: Relationship.Relationship<number>
+
+    beforeEach(() => {
+        inst = new Relationship.Relationship()
+        inst.to(2, 1).to(3, 1).to(4, 2)
+    })
+
+    test("0", () => {
+        const a: Record<string, number> = Object.fromEntries(inst.weights(false, true).entries())
+        expect(a).toMatchObject({ '1': 1, '2': 0.5, '3': 0, '4': 0 })
+
+        const b: Record<string, number> = Object.fromEntries(inst.weights(false, true, true).entries())
+        expect(b).toMatchObject({ '1': 0.6666666666666666, '2': 0.3333333333333333, '3': 0, '4': 0 })
+
+        const c: Record<string, number> = Object.fromEntries(inst.weights(false).entries())
+        expect(c).toMatchObject({ '1': 2, '2': 1, '3': 0, '4': 0 })
     })
 })
