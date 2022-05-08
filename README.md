@@ -362,10 +362,10 @@ Get all children nodes without primary from the instance.
 
 ```javascript
 const a = new Relationship().to('a', 'b').to('b', 'c')
-a.children // b, c
+a.from('a').children // b, c
 
 const b = a.both('d', 'e')
-b.children // b, c, d, e
+b.from('d').children // d, e
 ```
 
 ### `(getter)` ***nodeset***: `Set<T>`

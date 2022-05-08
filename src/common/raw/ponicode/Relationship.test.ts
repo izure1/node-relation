@@ -71,6 +71,20 @@ describe("Relationship.Relationship.reverse", () => {
     })
 })
 
+describe("Relationship.Relationship.children", () => {
+    let inst: Relationship.Relationship<number>
+
+    beforeEach(() => {
+      inst = new Relationship.Relationship()
+      inst.to(1, 2, 3).to(3, 4).both(5, 6)
+    })
+    
+    test("0", () => {
+        expect(inst.from(1).children.sort()).toEqual([2, 3, 4].sort())
+        expect(inst.from(5).children.sort()).toEqual([5, 6].sort())
+    })
+})
+
 describe("Relationship.Relationship.raw", () => {
     let inst: Relationship.Relationship<{ name: string }>
 
