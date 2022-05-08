@@ -356,6 +356,18 @@ const state = new Relationship().to('a', 'b').to('b', 'c')
 state.nodes // a, b, c
 ```
 
+### `(getter)` ***children***: `T[]`
+
+Get all children nodes without primary from the instance.
+
+```javascript
+const a = new Relationship().to('a', 'b').to('b', 'c')
+a.children // b, c
+
+const b = a.both('d', 'e')
+b.children // b, c, d, e
+```
+
 ### `(getter)` ***nodeset***: `Set<T>`
 
 Get all nodes as Set object from the instance.

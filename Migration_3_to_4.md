@@ -48,6 +48,8 @@ Added new methods.
 
 ### `raw` (>=4.6.0)
 
+### (getter)`children` (>=4.6.2)
+
 Some method names have been changed.
 
 ### `setReferTo` => `to`

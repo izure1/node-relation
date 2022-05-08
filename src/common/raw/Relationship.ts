@@ -106,6 +106,15 @@ export class Relationship<T> {
     return nodes
   }
 
+  /** Get all children nodes without primary from the instance. */
+  get children(): T[] {
+    const children: T[] = []
+    for (const targets of this.__relations.values()) {
+      Relationship.add(this.useEqual, children, ...targets)
+    }
+    return children
+  }
+
   /** Get all nodes as Set object from the instance. */
   get nodeset(): Set<T> {
     const set = new Set<T>()
