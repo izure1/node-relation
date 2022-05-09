@@ -258,6 +258,37 @@ const weights = state.weights()
 const normalizedWeights = state.weights(false, true)
 ```
 
+### ***entry***(node: `T`, log?: `boolean` = `false`): `number`
+
+Returns how many nodes are related to the node received by the parameter.
+
+```javascript
+const state = new Relationship()
+  .to('a', 'b')
+  .to('a', 'c')
+  .to('a', 'd')
+
+const entry = state.entry('a') // 3
+```
+
+### ***entries***(log?: `boolean` = `false`, normalize?: `boolean` = `false`, toScale?: `boolean` = `false`): `Map<T, number>`
+
+Returns the entry value of all nodes. Check the `entry` method.
+
+```javascript
+const state = new Relationship()
+  .to('a', 'b')
+  .to('a', 'c')
+  .to('a', 'd')
+  .to('b', 'a')
+
+// Map<[['a', 3], ['b', 1], ['c', 0], ['d', 0]]>
+const entries = state.entries()
+
+// Map<[['a', 1], ['b', 0.333...], ['c', 0], ['d', 0]]>
+const normalizedEntries = state.entries(false, true)
+```
+
 ### ***depth***(source: `T`, target: `T`, log?: `boolean` = `false`): `number`
 
 Returns the found minimum depth to between source to target.

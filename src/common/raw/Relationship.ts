@@ -97,7 +97,15 @@ export class Relationship<T> {
     return Array.from(this.__relations)
   }
 
-  /** Get all nodes from the instance. */
+  /**
+   * Get all nodes from the instance.  
+   * This getter is include all nodes in the relationship. If you want to exclude the primary node, use the `children` getter.
+   * @example
+   * const state = new Relationship().to('a', 'b').to('b', 'c')
+   * state.nodes // a, b, c
+   * state.from('a').nodes // a, b, c
+   * state.from('b').nodes // b, c
+   */
   get nodes(): T[] {
     const nodes: T[] = []
     for (const [source, targets] of this.__relations) {
@@ -106,7 +114,16 @@ export class Relationship<T> {
     return nodes
   }
 
-  /** Get all children nodes without primary from the instance. */
+  /**
+   * Get all children nodes without primary from the instance.
+   * This getter is exclude primary nodes in the relationship. If you want to include all node, use the `nodes` getter.
+   * @example
+   * const state = new Relationship().to('a', 'b').to('b', 'c')
+   * state.children // b, c.              because the relationship state is [ ['a', ['b']], ['b', ['c']] ]
+   * state.from('a').children // b, c.    because the relationship state is [ ['a', ['b']], ['b', ['c']] ]
+   * state.from('a', 1).children // b.    because the relationship state is [ ['a', ['b']] ]
+   * state.from('b').children // c.       because the relationship state is [ ['b', ['c']] ]
+   */
   get children(): T[] {
     const children: T[] = []
     for (const targets of this.__relations.values()) {
@@ -572,6 +589,56 @@ export class Relationship<T> {
       }
     }
     return weights
+  }
+
+  /**
+   * Returns how many nodes are related to the node received by the parameter.
+   * @param node Node to find.
+   * @param log If this parameter is set to true, it returns the value to which the log function is applied. This is useful when the value is too high.
+   * @example
+   * const A = state.to('a', 'b', 'c', 'd')
+   * A.entry('a') // 3
+   * A.entry('b') // 0
+   */
+  entry(node: T, log = false): number {
+    let entry = 0
+    if (this.__relations.has(node)) {
+      entry = this.__relations.get(node)!.length
+    }
+    if (log) {
+      entry = Math.log(entry + 1)
+    }
+    return entry
+  }
+
+  /**
+   * Returns the entry value of all nodes. Check the `entry` method.
+   * @param log If this parameter is set to true, it returns the value to which the log function is applied. This is useful when the value is too high.
+   * @param normalize Normalize the entry value. Convert all values to values from 0 to 1.
+   * @param toScale Change all entries sum as values to 1 when `normalize` parameter is `true`
+   */
+  entries(log = false, normalize = false, toScale = false): Map<T, number> {
+    const entries = new Map<T, number>()
+    let max = 0
+    let total = 0
+    for (const node of this.nodes) {
+      const entry = this.entry(node, log)
+      total += entry
+      if (entry > max) {
+        max = entry
+      }
+      entries.set(node, entry)
+    }
+    if (normalize) {
+      if (toScale) {
+        max = total
+      }
+      const map = Array.from(entries)
+      for (const [node, weight] of map) {
+        entries.set(node, weight / max)
+      }
+    }
+    return entries
   }
 
   /**

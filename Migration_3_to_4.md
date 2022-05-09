@@ -50,6 +50,10 @@ Added new methods.
 
 ### (getter)`children` (>=4.6.2)
 
+### `entry` (>=4.7.0)
+
+### `entries` (>=4.7.0)
+
 Some method names have been changed.
 
 ### `setReferTo` => `to`

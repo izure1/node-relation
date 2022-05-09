@@ -123,3 +123,24 @@ describe("Relationship.Relationship.weights", () => {
         expect(c).toMatchObject({ '1': 2, '2': 1, '3': 0, '4': 0 })
     })
 })
+
+// @ponicode
+describe("Relationship.Relationship.entries", () => {
+  let inst: Relationship.Relationship<number>
+
+  beforeEach(() => {
+      inst = new Relationship.Relationship()
+      inst.to(2, 1).to(3, 1).to(4, 2)
+  })
+
+  test("0", () => {
+      const a: Record<string, number> = Object.fromEntries(inst.entries(false, true).entries())
+      expect(a).toMatchObject({ '1': 0, '2': 1, '3': 1, '4': 1 })
+
+      const b: Record<string, number> = Object.fromEntries(inst.entries(false, true, true).entries())
+      expect(b).toMatchObject({ '1': 0, '2': 0.3333333333333333, '3': 0.3333333333333333, '4': 0.3333333333333333 })
+
+      const c: Record<string, number> = Object.fromEntries(inst.entries(false).entries())
+      expect(c).toMatchObject({ '1': 0, '2': 1, '3': 1, '4': 1 })
+  })
+})
