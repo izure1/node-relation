@@ -251,10 +251,10 @@ const state = new Relationship()
   .to('c', 'd')
   .to('d', 'a')
 
-// Map<[['a', 1], ['b', 0], ['c', 0], ['d', 3]]>
+// Map<[['a', 3], ['b', 0], ['c', 0], ['d', 3]]>
 const weights = state.weights()
 
-// Map<[['a', 0.333...], ['b', 0], ['c', 0], ['d', 1]]>
+// Map<[['a', 1], ['b', 0], ['c', 0], ['d', 1]]>
 const normalizedWeights = state.weights(false, true)
 ```
 
@@ -282,10 +282,10 @@ const state = new Relationship()
   .to('a', 'd')
   .to('b', 'a')
 
-// Map<[['a', 3], ['b', 1], ['c', 0], ['d', 0]]>
+// Map<[['a', 4], ['b', 4], ['c', 0], ['d', 0]]>
 const entries = state.entries()
 
-// Map<[['a', 1], ['b', 0.333...], ['c', 0], ['d', 0]]>
+// Map<[['a', 1], ['b', 1], ['c', 0], ['d', 0]]>
 const normalizedEntries = state.entries(false, true)
 ```
 

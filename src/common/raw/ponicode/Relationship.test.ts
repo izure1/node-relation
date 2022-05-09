@@ -105,36 +105,30 @@ describe("Relationship.Relationship.raw", () => {
 
 // @ponicode
 describe("Relationship.Relationship.weights", () => {
-    let inst: Relationship.Relationship<number>
+    let inst: Relationship.Relationship<string>
 
     beforeEach(() => {
         inst = new Relationship.Relationship()
-        inst.to(2, 1).to(3, 1).to(4, 2)
+        inst.to('a', 'd').to('b', 'd').to('c', 'd').to('d', 'a')
     })
 
     test("0", () => {
         const a: Record<string, number> = Object.fromEntries(inst.weights().entries())
-        expect(a).toMatchObject({ '1': 3, '2': 1, '3': 0, '4': 0 })
-
-        const b: Record<string, number> = Object.fromEntries(inst.weights(false, true, true).entries())
-        expect(b).toMatchObject({ '1': 0.75, '2': 0.25, '3': 0, '4': 0 })
+        expect(a).toMatchObject({ 'a': 3, 'b': 1, 'c': 0, 'd': 3 })
     })
 })
 
 // @ponicode
 describe("Relationship.Relationship.entries", () => {
-  let inst: Relationship.Relationship<number>
+  let inst: Relationship.Relationship<string>
 
   beforeEach(() => {
       inst = new Relationship.Relationship()
-      inst.to(2, 1).to(3, 1).to(4, 2)
+      inst.to('a', 'b').to('a', 'c').to('a', 'd').to('b', 'a')
   })
 
   test("0", () => {
       const a: Record<string, number> = Object.fromEntries(inst.entries().entries())
-      expect(a).toMatchObject({ '1': 0, '2': 1, '3': 1, '4': 2 })
-
-      const b: Record<string, number> = Object.fromEntries(inst.entries(false, true, true).entries())
-      expect(b).toMatchObject({ '1': 0, '2': 0.25, '3': 0.25, '4': 0.5 })
+      expect(a).toMatchObject({ 'a': 4, 'b': 4, 'c': 0, 'd': 0 })
   })
 })
