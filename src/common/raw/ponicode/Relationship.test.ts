@@ -113,14 +113,11 @@ describe("Relationship.Relationship.weights", () => {
     })
 
     test("0", () => {
-        const a: Record<string, number> = Object.fromEntries(inst.weights(false, true).entries())
-        expect(a).toMatchObject({ '1': 1, '2': 0.5, '3': 0, '4': 0 })
+        const a: Record<string, number> = Object.fromEntries(inst.weights().entries())
+        expect(a).toMatchObject({ '1': 3, '2': 1, '3': 0, '4': 0 })
 
         const b: Record<string, number> = Object.fromEntries(inst.weights(false, true, true).entries())
-        expect(b).toMatchObject({ '1': 0.6666666666666666, '2': 0.3333333333333333, '3': 0, '4': 0 })
-
-        const c: Record<string, number> = Object.fromEntries(inst.weights(false).entries())
-        expect(c).toMatchObject({ '1': 2, '2': 1, '3': 0, '4': 0 })
+        expect(b).toMatchObject({ '1': 0.75, '2': 0.25, '3': 0, '4': 0 })
     })
 })
 
@@ -134,13 +131,10 @@ describe("Relationship.Relationship.entries", () => {
   })
 
   test("0", () => {
-      const a: Record<string, number> = Object.fromEntries(inst.entries(false, true).entries())
-      expect(a).toMatchObject({ '1': 0, '2': 1, '3': 1, '4': 1 })
+      const a: Record<string, number> = Object.fromEntries(inst.entries().entries())
+      expect(a).toMatchObject({ '1': 0, '2': 1, '3': 1, '4': 2 })
 
       const b: Record<string, number> = Object.fromEntries(inst.entries(false, true, true).entries())
-      expect(b).toMatchObject({ '1': 0, '2': 0.3333333333333333, '3': 0.3333333333333333, '4': 0.3333333333333333 })
-
-      const c: Record<string, number> = Object.fromEntries(inst.entries(false).entries())
-      expect(c).toMatchObject({ '1': 0, '2': 1, '3': 1, '4': 1 })
+      expect(b).toMatchObject({ '1': 0, '2': 0.25, '3': 0.25, '4': 0.5 })
   })
 })

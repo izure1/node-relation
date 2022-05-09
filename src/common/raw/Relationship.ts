@@ -549,12 +549,7 @@ export class Relationship<T> {
    * A.weight('user-b') // 1
    */
   weight(node: T, log = false): number {
-    let weight = 0
-    for (const relation of this.__relations.values()) {
-      if (Relationship.has(this.useEqual, relation, node)) {
-        weight++
-      }
-    }
+    let weight = this.reverse.from(node).children.length
     if (log) {
       weight = Math.log(weight + 1)
     }
@@ -601,10 +596,7 @@ export class Relationship<T> {
    * A.entry('b') // 0
    */
   entry(node: T, log = false): number {
-    let entry = 0
-    if (this.__relations.has(node)) {
-      entry = this.__relations.get(node)!.length
-    }
+    let entry = this.from(node).children.length
     if (log) {
       entry = Math.log(entry + 1)
     }
