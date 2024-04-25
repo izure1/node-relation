@@ -1,6 +1,5 @@
 import equal from 'fast-deep-equal'
 
-
 export class EqualMap<K, V> extends Map<K, V> {
   constructor(iterable?: Iterable<readonly [K, V]>|null|undefined) {
     super()

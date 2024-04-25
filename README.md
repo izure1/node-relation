@@ -1,6 +1,7 @@
 # node-relation
 
 [![jsdelivr](https://data.jsdelivr.com/v1/package/npm/node-relation/badge)](https://www.jsdelivr.com/package/npm/node-relation)
+![Github node.js workflow](https://github.com/izure1/node-relation/actions/workflows/node.js.yml/badge.svg)
 
 This module helps you manage string, numbers, object as a group.
 Check the code.
@@ -31,19 +32,10 @@ npm install node-relation
 
 ## How to use
 
-### Browser (umd)
-
-```html
-<script src="https://cdn.jsdelivr.net/npm/node-relation@4.x.x/dist/umd/index.min.js"></script>
-<script>
-  const state = new NodeRelation.Relationship().to('a', 'b', 'c')
-</script>
-```
-
 ### Browser (esnext)
 
 ```javascript
-import { Relationship } from 'https://cdn.jsdelivr.net/npm/node-relation@4.x.x/dist/esm/index.min.js'
+import { Relationship } from 'https://cdn.jsdelivr.net/npm/node-relation@5.x.x/+esm'
 ```
 
 ### Node.js
@@ -251,7 +243,7 @@ const state = new Relationship()
   .to('c', 'd')
   .to('d', 'a')
 
-// Map<[['a', 3], ['b', 0], ['c', 0], ['d', 3]]>
+// Map<[['a', 4], ['b', 0], ['c', 0], ['d', 4]]>
 const weights = state.weights()
 
 // Map<[['a', 1], ['b', 0], ['c', 0], ['d', 1]]>
@@ -497,12 +489,12 @@ console.log( state.from('server-b').without('server-b') ) // userC
 ```
 
 ```javascript
-import { Relationship } from 'node-relation/dist/umd/raw/index'
+import { RawRelationship } from 'node-relation'
 
 const sentence = 'what will the fat cat sit on'
 const words = sentence.split(' ')
 
-const state = new Relationship<string>()
+const state = new RawRelationship<string>()
 
 words.forEach((word, i) => {
   const next = words[i+1]

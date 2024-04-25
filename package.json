@@ -1,17 +1,23 @@
 {
   "name": "node-relation",
-  "version": "4.7.2",
+  "version": "5.0.0",
   "description": "Manage strings, number, object that are related to each other.",
-  "main": "dist/umd/index.js",
-  "module": "dist/esm/index.js",
+  "main": "dist/cjs/index.cjs",
+  "module": "dist/esm/index.mjs",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.mjs",
+      "require": "./dist/cjs/index.cjs",
+      "types": "./dist/types/index.d.ts"
+    }
+  },
   "scripts": {
     "test": "jest",
-    "build": "webpack && tsc --emitDeclarationOnly"
+    "build": "node build/index.js && tsc"
   },
   "files": [
-    "dist/**/*.js",
-    "dist/**/*.ts",
-    "!/**/*.test.ts"
+    "dist/**/*"
   ],
   "author": "izure <admin@izure.org>",
   "homepage": "https://github.com/izure1/node-relation",
@@ -35,19 +41,14 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@babel/preset-env": "^7.16.11",
-    "@babel/preset-typescript": "^7.16.7",
-    "@types/jest": "^27.4.1",
-    "@types/node": "12.12.2",
-    "babel-loader": "^8.2.4",
-    "jest": "^27.5.1",
-    "ts-jest": "^27.1.4",
-    "typescript": "4.0.3",
-    "webpack": "^5.68.0",
-    "webpack-cli": "^4.9.2"
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.12.7",
+    "esbuild": "^0.20.2",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.4.5"
   },
   "dependencies": {
-    "assert": "^2.0.0",
     "fast-deep-equal": "^3.1.3"
   }
 }
